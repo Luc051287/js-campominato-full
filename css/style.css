@@ -1,0 +1,43 @@
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+body {
+  background-color: #FFFFFF;
+}
+
+.container {
+  width: 100%;
+  height: 100%;
+}
+
+header {
+  height: 70px;
+  border-bottom: 1px solid black;
+}
+
+main {
+  height: calc(100% - 70px);
+  display: flex;
+}
+
+#box_field {
+  background-color: lightgray;
+  margin: auto;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.box {
+  border: 1px solid gray;
+  height: 40px;
+  width: 40px;
+  cursor: pointer;
+}
+
+.box_item {
+  text-align: center;
+  line-height: 40px;
+}
