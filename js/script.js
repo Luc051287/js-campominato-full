@@ -66,6 +66,9 @@ $(document).ready(function() {
     }
   }
   $("#box_field").css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
+
+  $(".box_item").addClass("hide");
+
 });
 
 /// FUNCTIONS
@@ -99,21 +102,21 @@ function levelChoise(value) {
   let gameLevel,max,bombs,width,height;
   switch(value) {
     case 0:
-      gameLevel = randomInteger(1, 81);
+      gameLevel = randomInteger(0, 80);
       max = [9,9];
       bombs = 10;
       width = 360;
       height = 360;
       break;
     case 1:
-      gameLevel = randomInteger(1, 256);
+      gameLevel = randomInteger(0, 255);
       max = [16,16];
       bombs = 40;
       width = 640;
       height = 640;
       break;
     case 2:
-      gameLevel = randomInteger(1, 480);
+      gameLevel = randomInteger(0, 479);
       max = [30,16];
       bombs = 99;
       width = 1200;

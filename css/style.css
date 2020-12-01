@@ -28,6 +28,8 @@ main {
   margin: auto;
   display: flex;
   flex-wrap: wrap;
+  box-sizing: content-box;  
+  border: 1px solid gray;
 }
 
 .box {
@@ -35,9 +37,15 @@ main {
   height: 40px;
   width: 40px;
   cursor: pointer;
+  box-shadow: 2px 2px 0px 0px white inset, 0px 0px 3px 2px gray inset;
 }
 
 .box_item {
   text-align: center;
   line-height: 40px;
+
+}
+
+.hide {
+  opacity: 0;
 }
