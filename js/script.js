@@ -1,9 +1,13 @@
 $(document).ready(function() {
 
-  var arrayCpu =[];
-  var row, column;
+  var arraybombs =[];
+  var row, column, bomb;
   var field = [];
-  var bomb;
+
+  // var box = {
+  //   row: 0,
+  //   column: 0
+  // };
 
   var level = parseInt(prompt("Scegli il livello"));
 
@@ -19,44 +23,44 @@ $(document).ready(function() {
 
   console.log(field);
 
-  while (arrayCpu.length < levelChoise(level)[2]) {
+  while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
     console.log(bomb);
     console.log(field[bomb]);
-    if (checkIfDiff(field[bomb], arrayCpu)) {
-      arrayCpu.push(field[bomb]);
+    if (checkIfDiff(field[bomb], arraybombs)) {
+      arraybombs.push(field[bomb]);
     }
   }
 
-  console.log(arrayCpu);
+  console.log(arraybombs);
 
   var numOfBombs = 0;
   for (var x=1; x<=levelChoise(level)[1][0]; x++) {
     for (var y=1; y<=levelChoise(level)[1][1]; y++) {
       numOfBombs = 0;
-      if (!mySome(arrayCpu, x, y)) {
-        if (mySome(arrayCpu, x-1, y-1)) {
+      if (!checkBombs(arraybombs, x, y)) {
+        if (checkBombs(arraybombs, x-1, y-1)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x-1, y)) {
+        if (checkBombs(arraybombs, x-1, y)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x-1, y+1)) {
+        if (checkBombs(arraybombs, x-1, y+1)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x, y-1)) {
+        if (checkBombs(arraybombs, x, y-1)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x, y+1)) {
+        if (checkBombs(arraybombs, x, y+1)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x+1, y-1)) {
+        if (checkBombs(arraybombs, x+1, y-1)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x+1, y)) {
+        if (checkBombs(arraybombs, x+1, y)) {
           numOfBombs += 1
         }
-        if (mySome(arrayCpu, x+1, y+1)) {
+        if (checkBombs(arraybombs, x+1, y+1)) {
           numOfBombs += 1
         }
         $("#box_field").append(`<div class="box"><p class="box_item">${numOfBombs}</p></div>`);
@@ -65,25 +69,32 @@ $(document).ready(function() {
       }
     }
   }
+
   $("#box_field").css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
   $(".box_item").addClass("hide");
 
+  $(".box").each(function() {
+    $(this).mousedown(function(event) {
+      if (event.which == 1) {
+        $(this).css("box-shadow","none");
+      }
+    });
+    $(this).mouseup(function(event) {
+      if (event.which == 1) {
+        $(this).children().removeClass("hide");
+      }
+    });
+  });
+
+  // Tolgo il menu che si apre con il tasto destro
+  // $(document).on("contextmenu",function(){
+  //   return false;
+  // });
+
 });
 
 /// FUNCTIONS
-
-// function fieldBuild (arg1, arg2) {
-//   var array = [];
-//   for (let x=1; x<=10; x++) {
-//     arg1 = x;
-//     for (let y=1; y<=10; y++) {
-//       arg2 = y;
-//       array.push([arg1,arg2]);
-//     }
-//   }
-//   return array;
-// }
 
 function checkIfDiff(value, array) {
   for (elem of array) {
@@ -127,6 +138,6 @@ function levelChoise(value) {
   return [gameLevel, max, bombs, width, height];
 }
 
-function mySome(array, i, j) {
+function checkBombs(array, i, j) {
   return array.some(item => item.join("") == [i, j].join(""))
 }
