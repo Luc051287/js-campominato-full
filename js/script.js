@@ -3,21 +3,21 @@ $(document).ready(function() {
   var arraybombs =[];
   var row, column, bomb;
   var field = [];
-
-  // var box = {
-  //   row: 0,
-  //   column: 0
-  // };
+  var box = {
+    position: [0,0],
+    bombs: 0,
+    isBomb: false
+  };
 
   var level = parseInt(prompt("Scegli il livello"));
 
   console.log(levelChoise(level));
 
   for (var x=1; x<=levelChoise(level)[1][0]; x++) {
-    row = x;
     for (var y=1; y<=levelChoise(level)[1][1]; y++) {
-      column = y;
-      field.push([row,column]);
+      let newBox = Object.create(box);
+      newBox.position = [x,y];
+      field.push(newBox);
     }
   }
 
@@ -25,9 +25,9 @@ $(document).ready(function() {
 
   while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
-    console.log(bomb);
-    console.log(field[bomb]);
-    if (checkIfDiff(field[bomb], arraybombs)) {
+    if (checkIfDiff(field[bomb].position, arraybombs)) {
+      field[bomb].bombs = "B";
+      field[bomb].isBomb = true;
       arraybombs.push(field[bomb]);
     }
   }
@@ -35,6 +35,10 @@ $(document).ready(function() {
   console.log(arraybombs);
 
   var numOfBombs = 0;
+
+  var prova = new Set();
+  var counter = 0;
+
   for (var x=1; x<=levelChoise(level)[1][0]; x++) {
     for (var y=1; y<=levelChoise(level)[1][1]; y++) {
       numOfBombs = 0;
@@ -63,12 +67,57 @@ $(document).ready(function() {
         if (checkBombs(arraybombs, x+1, y+1)) {
           numOfBombs += 1
         }
-        $("#box_field").append(`<div class="box"><p class="box_item">${numOfBombs}</p></div>`);
+
+        if (!field[counter].isBomb) {
+          field[counter].bombs = numOfBombs;
+        }
+
+        $("#box_field").append(`<div class="box"><p class="box_item">${field[counter].bombs}</p></div>`);
+
+        counter += 1;
+
       } else {
-        $("#box_field").append(`<div class="box"><p class="box_item">B</p></div>`);
+        $("#box_field").append(`<div class="box"><p class="box_item">${field[counter].bombs}</p></div>`);
+        counter += 1;
       }
     }
   }
+
+  console.log(field);
+
+  // for (var x=1; x<=levelChoise(level)[1][0]; x++) {
+  //   for (var y=1; y<=levelChoise(level)[1][1]; y++) {
+  //     if (!checkBombs(arraybombs, x, y)) {
+  //
+  //       // if
+  //
+  //       if (checkBombs(arraybombs, x-1, y-1)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x-1, y)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x-1, y+1)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x, y-1)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x, y+1)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x+1, y-1)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x+1, y)) {
+  //         numOfBombs += 1
+  //       }
+  //       if (checkBombs(arraybombs, x+1, y+1)) {
+  //         numOfBombs += 1
+  //       }
+  //     }
+  //   }
+  // }
 
   $("#box_field").css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
@@ -98,7 +147,7 @@ $(document).ready(function() {
 
 function checkIfDiff(value, array) {
   for (elem of array) {
-    if (value.join() == elem.join()) {
+    if (value.join() == elem.position.join()) {
       return false;
     }
   }
@@ -138,6 +187,13 @@ function levelChoise(value) {
   return [gameLevel, max, bombs, width, height];
 }
 
-function checkBombs(array, i, j) {
-  return array.some(item => item.join("") == [i, j].join(""))
+// vedere se si riesce ad usare some!
+function checkBombs(objects, i, j) {
+  let bool = false;
+  objects.forEach((elem) => {
+    if (elem.position.join("") == [i, j].join("")) {
+      bool = true;
+    }
+  });
+  return bool;
 }
