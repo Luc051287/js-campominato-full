@@ -1,7 +1,7 @@
 $(document).ready(function() {
 
   var arraybombs =[];
-  var row, column, bomb;
+  var bomb;
   var field = [];
   var box = {
     position: [0,0],
@@ -35,7 +35,6 @@ $(document).ready(function() {
   console.log(arraybombs);
 
   var numOfBombs = 0;
-
   var prova = new Set();
   var counter = 0;
 
@@ -78,6 +77,7 @@ $(document).ready(function() {
 
       } else {
         $("#box_field").append(`<div class="box"><p class="box_item">${field[counter].bombs}</p></div>`);
+
         counter += 1;
       }
     }
@@ -187,13 +187,16 @@ function levelChoise(value) {
   return [gameLevel, max, bombs, width, height];
 }
 
-// vedere se si riesce ad usare some!
 function checkBombs(objects, i, j) {
-  let bool = false;
-  objects.forEach((elem) => {
-    if (elem.position.join("") == [i, j].join("")) {
-      bool = true;
-    }
-  });
-  return bool;
+  return objects.some(item => item.position.join("") == [i, j].join(""))
 }
+
+// function checkBombs(objects, i, j) {
+//   let bool = false;
+//   objects.forEach((elem) => {
+//     if (elem.position.join("") == [i, j].join("")) {
+//       bool = true;
+//     }
+//   });
+//   return bool;
+// }
