@@ -1,20 +1,21 @@
 $(document).ready(function() {
 
-  var arraybombs =[];
-  var bomb;
-  var field = [];
-  var box = {
+  const arraybombs =[];
+  let bomb;
+  const field = [];
+
+  const box = {
     position: [0,0],
     bombs: 0,
     isBomb: false
   };
 
-  var level = parseInt(prompt("Scegli il livello"));
+  let level = parseInt(prompt("Scegli il livello"));
 
   console.log(levelChoise(level));
 
-  for (var x=1; x<=levelChoise(level)[1][0]; x++) {
-    for (var y=1; y<=levelChoise(level)[1][1]; y++) {
+  for (let x=1; x<=levelChoise(level)[1][0]; x++) {
+    for (let y=1; y<=levelChoise(level)[1][1]; y++) {
       let newBox = Object.create(box);
       newBox.position = [x,y];
       field.push(newBox);
@@ -34,12 +35,11 @@ $(document).ready(function() {
 
   console.log(arraybombs);
 
-  var numOfBombs = 0;
-  var prova = new Set();
-  var counter = 0;
+  let numOfBombs = 0;
+  let counter = 0;
 
-  for (var x=1; x<=levelChoise(level)[1][0]; x++) {
-    for (var y=1; y<=levelChoise(level)[1][1]; y++) {
+  for (let x=1; x<=levelChoise(level)[1][0]; x++) {
+    for (let y=1; y<=levelChoise(level)[1][1]; y++) {
       numOfBombs = 0;
       if (!checkBombs(arraybombs, x, y)) {
         if (checkBombs(arraybombs, x-1, y-1)) {
@@ -85,39 +85,11 @@ $(document).ready(function() {
 
   console.log(field);
 
-  // for (var x=1; x<=levelChoise(level)[1][0]; x++) {
-  //   for (var y=1; y<=levelChoise(level)[1][1]; y++) {
-  //     if (!checkBombs(arraybombs, x, y)) {
-  //
-  //       // if
-  //
-  //       if (checkBombs(arraybombs, x-1, y-1)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x-1, y)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x-1, y+1)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x, y-1)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x, y+1)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x+1, y-1)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x+1, y)) {
-  //         numOfBombs += 1
-  //       }
-  //       if (checkBombs(arraybombs, x+1, y+1)) {
-  //         numOfBombs += 1
-  //       }
-  //     }
-  //   }
-  // }
+  let secondCounter = 0;
+  let prova = [];
+
+  
+
 
   $("#box_field").css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
@@ -145,6 +117,7 @@ $(document).ready(function() {
 
 /// FUNCTIONS
 
+// vedere se usare includes
 function checkIfDiff(value, array) {
   for (elem of array) {
     if (value.join() == elem.position.join()) {
@@ -154,9 +127,7 @@ function checkIfDiff(value, array) {
   return true;
 }
 
-function randomInteger(min, max) {
-  return Math.floor(Math.random() * (max - min + 1)) + min;
-}
+const randomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
 function levelChoise(value) {
   let gameLevel,max,bombs,width,height;
@@ -187,16 +158,4 @@ function levelChoise(value) {
   return [gameLevel, max, bombs, width, height];
 }
 
-function checkBombs(objects, i, j) {
-  return objects.some(item => item.position.join("") == [i, j].join(""))
-}
-
-// function checkBombs(objects, i, j) {
-//   let bool = false;
-//   objects.forEach((elem) => {
-//     if (elem.position.join("") == [i, j].join("")) {
-//       bool = true;
-//     }
-//   });
-//   return bool;
-// }
+const checkBombs = (objects, i, j) => objects.some(item => item.position.join("") == [i, j].join(""));
