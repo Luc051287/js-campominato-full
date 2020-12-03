@@ -88,14 +88,12 @@ $(document).ready(function() {
   let secondCounter = 0;
   let prova = [];
 
-  
-
 
   $("#box_field").css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
   $(".box_item").addClass("hide");
 
-  $(".box").each(function() {
+  $(".box").each(function(index) {
     $(this).mousedown(function(event) {
       if (event.which == 1) {
         $(this).css("box-shadow","none");
@@ -104,6 +102,12 @@ $(document).ready(function() {
     $(this).mouseup(function(event) {
       if (event.which == 1) {
         $(this).children().removeClass("hide");
+      };
+      if (isZero(field[index])) {
+        openCloserCells(field, $(".box"), index, level);
+        console.log("TRUE");
+      } else {
+        console.log("FALSE");
       }
     });
   });
@@ -159,3 +163,73 @@ function levelChoise(value) {
 }
 
 const checkBombs = (objects, i, j) => objects.some(item => item.position.join("") == [i, j].join(""));
+
+function isZero(object) {
+  return object.bombs == 0;
+}
+
+function openCloserCells(objects, container, index, level) {
+
+  for (let x=objects[index].position[0]; x<=levelChoise(level)[1][0]; x++) {
+    for (let y=objects[index].position[1]; y<=levelChoise(level)[1][1]; y++) {
+
+      console.log(index);
+
+      if (isZero(objects[index-1])) {
+        container.eq(index-1).css("box-shadow","none");
+        container.eq(index-1).children().removeClass("hide");
+        console.log(index-1);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index+1])) {
+        container.eq(index+1).css("box-shadow","none");
+        container.eq(index+1).children().removeClass("hide");
+        console.log(index+1);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index-10])) {
+        container.eq(index-10).css("box-shadow","none");
+        container.eq(index-10).children().removeClass("hide");
+        console.log(index-10);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index-9])) {
+        container.eq(index-9).css("box-shadow","none");
+        container.eq(index-9).children().removeClass("hide");
+        console.log(index-9);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index-8])) {
+        container.eq(index-8).css("box-shadow","none");
+        container.eq(index-8).children().removeClass("hide");
+        console.log(index-8);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index+10])) {
+        container.eq(index+10).css("box-shadow","none");
+        container.eq(index+10).children().removeClass("hide");
+        console.log(index+10);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index+9])) {
+        container.eq(index+9).css("box-shadow","none");
+        container.eq(index+9).children().removeClass("hide");
+        console.log(index+9);
+        // openCloserCells(objects, container, index-1);
+      }
+
+      if (isZero(objects[index+8])) {
+        container.eq(index+8).css("box-shadow","none");
+        container.eq(index+8).children().removeClass("hide");
+        console.log(index+8);
+        // openCloserCells(objects, container, index-1);
+      }
+    }
+  }
+}
