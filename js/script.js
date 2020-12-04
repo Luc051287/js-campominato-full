@@ -3,7 +3,7 @@
 // farlo funzionare con livelli di difficoltà più alti
 
 $(document).ready(function() {
-
+  // se consegni e chiedi pareri mettere questo oggetto
   // const box = {
   //   position: [0,0],
   //   bombs: 0,
@@ -106,11 +106,12 @@ function generatefield (level, field, arraybombs, fieldBoxes) {
 
 function includes(value, array) {
   for (elem of array) {
+    // rictrollare , magari passare opzionali cosi da poterla riusare qui
     if (value.join() == elem.position.join()) {
-      return false;
+      return true;
     }
   }
-  return true;
+  return false;
 }
 
 const randomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
@@ -179,7 +180,7 @@ function arrayBombs(level, field) {
   let arraybombs = []
   while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
-    if (includes(field[bomb].position, arraybombs)) {
+    if (!includes(field[bomb].position, arraybombs)) {
       field[bomb].bombs = "B";
       field[bomb].isBomb = true;
       arraybombs.push(field[bomb]);
