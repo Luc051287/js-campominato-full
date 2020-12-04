@@ -1,24 +1,32 @@
+// ES6 aggiunge la classe, per cui si potrebbe scrivere box come classe e metterci dentro sia le proprietà che qualche funzione! Provare a pensare se può essere utilizzato VueJS!
+// Mettere protezione per gli elementi undefined! 
+
 $(document).ready(function() {
 
   const arraybombs =[];
-  let bomb;
   const field = [];
 
   const box = {
     position: [0,0],
     bombs: 0,
-    isBomb: false
+    isBomb: false,
+    id: 0,
+    opened: false
   };
 
   let level = parseInt(prompt("Scegli il livello"));
 
   console.log(levelChoise(level));
 
+  let contatore = 0;
+
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
     for (let y=1; y<=levelChoise(level)[1][1]; y++) {
       let newBox = Object.create(box);
       newBox.position = [x,y];
+      newBox.id = contatore;
       field.push(newBox);
+      contatore += 1;
     }
   }
 
@@ -38,6 +46,8 @@ $(document).ready(function() {
   let numOfBombs = 0;
   let counter = 0;
 
+
+  // Provare a fare foreach con funzione
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
     for (let y=1; y<=levelChoise(level)[1][1]; y++) {
       numOfBombs = 0;
@@ -104,7 +114,9 @@ $(document).ready(function() {
         $(this).children().removeClass("hide");
       };
       if (isZero(field[index])) {
-        openCloserCells(field, $(".box"), index, level);
+        field[index].opened = true;
+        openAdiacent($(".box"), field, field[index].position[0], field[index].position[1]);
+        console.log(field);
         console.log("TRUE");
       } else {
         console.log("FALSE");
@@ -168,68 +180,58 @@ function isZero(object) {
   return object.bombs == 0;
 }
 
-function openCloserCells(objects, container, index, level) {
 
-  for (let x=objects[index].position[0]; x<=levelChoise(level)[1][0]; x++) {
-    for (let y=objects[index].position[1]; y<=levelChoise(level)[1][1]; y++) {
-
-      console.log(index);
-
-      if (isZero(objects[index-1])) {
-        container.eq(index-1).css("box-shadow","none");
-        container.eq(index-1).children().removeClass("hide");
-        console.log(index-1);
-        // openCloserCells(objects, container, index-1);
+function openAdiacent(container, array, x, y) {
+    let newArr = [];
+    for (elem of array) {
+      if (elem.position.join("") == [x-1,y-1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index+1])) {
-        container.eq(index+1).css("box-shadow","none");
-        container.eq(index+1).children().removeClass("hide");
-        console.log(index+1);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x-1,y].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index-10])) {
-        container.eq(index-10).css("box-shadow","none");
-        container.eq(index-10).children().removeClass("hide");
-        console.log(index-10);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x-1,y+1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index-9])) {
-        container.eq(index-9).css("box-shadow","none");
-        container.eq(index-9).children().removeClass("hide");
-        console.log(index-9);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x,y+1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index-8])) {
-        container.eq(index-8).css("box-shadow","none");
-        container.eq(index-8).children().removeClass("hide");
-        console.log(index-8);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x+1,y+1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index+10])) {
-        container.eq(index+10).css("box-shadow","none");
-        container.eq(index+10).children().removeClass("hide");
-        console.log(index+10);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x+1,y].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index+9])) {
-        container.eq(index+9).css("box-shadow","none");
-        container.eq(index+9).children().removeClass("hide");
-        console.log(index+9);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x+1,y-1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
-
-      if (isZero(objects[index+8])) {
-        container.eq(index+8).css("box-shadow","none");
-        container.eq(index+8).children().removeClass("hide");
-        console.log(index+8);
-        // openCloserCells(objects, container, index-1);
+      if (elem.position.join("") == [x,y-1].join("")) {
+        newArr.push(elem);
+        container.eq(elem.id).css("box-shadow","none");
+        container.eq(elem.id).children().removeClass("hide");
       }
     }
-  }
+    console.log(newArr);
+    for (item of newArr) {
+      if (isZero(item) && item.opened == false) {
+        console.log(item);
+        item.opened = true;
+        openAdiacent(container, array, item.position[0], item.position[1]);
+      }
+      item.opened = true;
+    }
 }
