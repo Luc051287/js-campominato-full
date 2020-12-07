@@ -45,6 +45,17 @@ main {
   line-height: 40px;
   cursor: pointer;
   font-size: 25px;
+  font-weight: bolder;
+}
+
+i {
+  width: 100%;
+  text-align: center;
+  font-size: 25px;
+}
+
+.fas {
+  line-height: 40px;
 }
 
 .hide {

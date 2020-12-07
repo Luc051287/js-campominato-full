@@ -3,26 +3,15 @@
 // farlo funzionare con livelli di difficoltà più alti. Per colori numeri fare come esercizio icone
 
 $(document).ready(function() {
-
-  // se consegni e chiedi pareri mettere questo oggetto, vedere come si metteon dei metodi dentro questo tipo di oggetti
-  // const box = {
-  //   position: [0,0],
-  //   bombs: 0,
-  //   isBomb: false,
-  //   id: 0,
-  //   opened: false
-  // };
-
-
-  class Box {
-   constructor(id, position, bombs, isBomb, isOpened) {
-      this.id = id;
-      this.position = position;
-      this.bombs = bombs;
-      this.isBomb = isBomb;
-      this.isOpened = isOpened;
-    }
-  }
+  // class Box {
+  //  constructor(id, position, bombs, isBomb, isOpened) {
+  //     this.id = id;
+  //     this.position = position;
+  //     this.bombs = bombs;
+  //     this.isBomb = isBomb;
+  //     this.isOpened = isOpened;
+  //   }
+  // }
 
   const fieldBoxes = $("#box_field");
 
@@ -39,35 +28,64 @@ $(document).ready(function() {
   fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
   $(".box_item").addClass("hide");
+  $(".fas").addClass("hide");
 
   $(".box").each(function(index) {
     $(this).mousedown(function(event) {
-      if (event.which == 1) {
+      if (event.which == 1 && newField[index].isFlagged == false) {
+        newField[index].isOpened = true;
+        console.log("CAMBIO")
         $(this).css("box-shadow","none");
       }
     });
     $(this).mouseup(function(event) {
-      if (event.which == 1) {
+      if (event.which == 1 && newField[index].isFlagged == false) {
         $(this).children().removeClass("hide");
-      };
-      if (isZero(newField[index])) {
-        newField[index].isOpened = true;
-        openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-        console.log("TRUE");
-      } else {
-        console.log("FALSE");
+        if (isZero(newField[index])) {
+          newField[index].isOpened = true;
+          openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
+          console.log("TRUE");
+        } else {
+          console.log("FALSE");
+        }
+      } else if (event.which == 3) {
+        if (newField[index].isOpened == false && newField[index].isFlagged == false) {
+          $(this).html(`
+            <i class="fas fa-flag"></i>
+          `);
+          newField[index].isFlagged = true;
+        } else if (newField[index].isFlagged == true){
+          if (newField[index].isBomb == true) {
+            $(this).html(`<i class="${newField[index].bombs}"></i>`);
+          } else {
+            $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
+          }
+          $(this).children().addClass("hide");
+          newField[index].isFlagged = false;
+        }
       }
     });
+
   });
 
   // Tolgo il menu che si apre con il tasto destro
-  // $(document).on("contextmenu",function(){
-  //   return false;
-  // });
+  $(document).on("contextmenu",function(){
+    return false;
+  });
 
 });
 
 //----------- FUNCTIONS ------------------------------------>
+const box = {
+  position: [0,0],
+  bombs: 0,
+  isBomb: false,
+  id: 0,
+  isOpened: false,
+  isFlagged: false
+};
+
+const colors = ["", "blue","green","red","indigo","orange","brown","pink","black"];
 
 function numbOfBombs(arraybombs, x, y) {
   let numOfBombs = 0;
@@ -91,10 +109,10 @@ function generatefield (level, field, arraybombs, fieldBoxes) {
           field[id].bombs = bombs;
         }
         // Metto i numeri nello schema
-        fieldBoxes.append(`<div class="box"><p class="box_item">${field[id].bombs}</p></div>`);
+        fieldBoxes.append(`<div class="box"><p class="box_item" style="color:${colors[field[id].bombs]}">${(field[id].bombs == 0) ? "" : field[id].bombs}</p></div>`);
       } else {
         // Metto le bombe nello schema
-        fieldBoxes.append(`<div class="box"><p class="box_item">${field[id].bombs}</p></div>`);
+        fieldBoxes.append(`<div class="box"><i class="${field[id].bombs}"></i></div>`);
       }
     }
   }
@@ -155,7 +173,7 @@ function field(level) {
   let field = []
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
     for (let y=1; y<=levelChoise(level)[1][1]; y++) {
-      let newBox = new Object();
+      let newBox = Object.create(box);
       newBox.position = [x,y];
       newBox.id = i;
       newBox.isOpened = false;
@@ -172,7 +190,7 @@ function arrayBombs(level, field) {
   while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
     if (!includes(field[bomb].position, arraybombs)) {
-      field[bomb].bombs = "B";
+      field[bomb].bombs = "fas fa-bomb";
       field[bomb].isBomb = true;
       arraybombs.push(field[bomb]);
     }
