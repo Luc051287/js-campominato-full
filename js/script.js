@@ -1,9 +1,10 @@
 // ES6 aggiunge la classe, per cui si potrebbe scrivere box come classe e metterci dentro sia le proprietà che qualche funzione! Provare a pensare se può essere utilizzato VueJS!
 // Mettere protezione per gli elementi undefined!
-// farlo funzionare con livelli di difficoltà più alti
+// farlo funzionare con livelli di difficoltà più alti. Per colori numeri fare come esercizio icone
 
 $(document).ready(function() {
-  // se consegni e chiedi pareri mettere questo oggetto
+
+  // se consegni e chiedi pareri mettere questo oggetto, vedere come si metteon dei metodi dentro questo tipo di oggetti
   // const box = {
   //   position: [0,0],
   //   bombs: 0,
@@ -70,8 +71,8 @@ $(document).ready(function() {
 
 function numbOfBombs(arraybombs, x, y) {
   let numOfBombs = 0;
-  const array = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
-  for (elem of array) {
+  const arrayPosAdj = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
+  for (elem of arrayPosAdj) {
     if (checkBombs(arraybombs, elem[0], elem[1])) {
       numOfBombs += 1;
     }
@@ -83,14 +84,9 @@ function numbOfBombs(arraybombs, x, y) {
 function generatefield (level, field, arraybombs, fieldBoxes) {
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
     for (let y=1; y<=levelChoise(level)[1][1]; y++) {
-      console.log(x,y);
-      console.log(field);
       let id = getId(field, x, y);
-
       if (!checkBombs(arraybombs, x, y)) {
-
         let bombs = numbOfBombs(arraybombs, x, y)
-        console.log(field[id]);
         if (!field[id].isBomb) {
           field[id].bombs = bombs;
         }
@@ -107,7 +103,7 @@ function generatefield (level, field, arraybombs, fieldBoxes) {
 function includes(value, array) {
   for (elem of array) {
     // rictrollare , magari passare opzionali cosi da poterla riusare qui
-    if (value.join() == elem.position.join()) {
+      if (equalArray(value, elem, 0, 0)) {
       return true;
     }
   }
@@ -146,15 +142,11 @@ function levelChoise(value) {
 
 function getId(array, x, y) {
   let id;
-  console.log(x,y)
   array.forEach(item => {
-    // console.log(item.position);
-    // console.log([x, y]);
-    if (equalArray(item, x, y)) {
+    if (equalArray(0, item, x, y)) {
       id = item.id;
     }
   });
-  console.log(id);
   return id;
 }
 
@@ -172,7 +164,6 @@ function field(level) {
       i += 1;
     }
   }
-  console.log(field);
   return field;
 }
 
@@ -190,66 +181,38 @@ function arrayBombs(level, field) {
 }
 
 // rifarla senza some in caso cosi vale per tutti i casi in cui mi serve
-const checkBombs = (array, x, y) => array.some(item => equalArray(item, x, y));
+const checkBombs = (array, x, y) => array.some(item => equalArray(0, item, x, y));
 
 function isZero(object) {
   return object.bombs == 0;
 }
 
-function equalArray(item, x, y) {
-  return (item.position[0] == x && item.position[1] == y)
+// chiedere o vedere bene questa cosa per gli opzionali
+function equalArray(value, item, x, y) {
+  if (value != 0) {
+    return (value[0] == item.position[0] && value[1] == item.position[1]);
+  } else {
+    return (item.position[0] == x && item.position[1] == y);
+  }
 }
 
 function openAdiacent(container, array, x, y) {
-    let newArr = [];
-    for (elem of array) {
-      if (elem.position.join("") == [x-1,y-1].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x-1,y].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x-1,y+1].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x,y+1].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x+1,y+1].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x+1,y].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x+1,y-1].join("")) {
-        newArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
-      }
-      if (elem.position.join("") == [x,y-1].join("")) {
-        newArr.push(elem);
+  let adjArr = [];
+  const arrayPosAdj = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
+  for (elem of array) {
+    for (pos of arrayPosAdj) {
+      if (equalArray(0, elem, pos[0], pos[1])) {
+        adjArr.push(elem);
         container.eq(elem.id).css("box-shadow","none");
         container.eq(elem.id).children().removeClass("hide");
       }
     }
-
-    for (item of newArr) {
-      if (isZero(item) && item.isOpened == false) {
-        item.isOpened = true;
-        openAdiacent(container, array, item.position[0], item.position[1]);
-      }
+  }
+  for (item of adjArr) {
+    if (isZero(item) && item.isOpened == false) {
       item.isOpened = true;
+      openAdiacent(container, array, item.position[0], item.position[1]);
     }
+    item.isOpened = true;
+  }
 }
