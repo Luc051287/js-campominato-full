@@ -34,7 +34,6 @@ $(document).ready(function() {
     $(this).mousedown(function(event) {
       if (event.which == 1 && newField[index].isFlagged == false) {
         newField[index].isOpened = true;
-        console.log("CAMBIO")
         $(this).css("box-shadow","none");
       }
     });
@@ -214,6 +213,7 @@ function equalArray(value, item, x, y) {
   }
 }
 
+// manca da fare il caso in cui l'adiacente non è aperto e ci ho messo una bandierina
 function openAdiacent(container, array, x, y) {
   let adjArr = [];
   const arrayPosAdj = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
@@ -221,8 +221,10 @@ function openAdiacent(container, array, x, y) {
     for (pos of arrayPosAdj) {
       if (equalArray(0, elem, pos[0], pos[1])) {
         adjArr.push(elem);
-        container.eq(elem.id).css("box-shadow","none");
-        container.eq(elem.id).children().removeClass("hide");
+        if (elem.isFlagged == false) {
+          container.eq(elem.id).css("box-shadow","none");
+          container.eq(elem.id).children().removeClass("hide");
+        }
       }
     }
   }
