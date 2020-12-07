@@ -3,15 +3,6 @@
 // farlo funzionare con livelli di difficoltà più alti. Per colori numeri fare come esercizio icone
 
 $(document).ready(function() {
-  // class Box {
-  //  constructor(id, position, bombs, isBomb, isOpened) {
-  //     this.id = id;
-  //     this.position = position;
-  //     this.bombs = bombs;
-  //     this.isBomb = isBomb;
-  //     this.isOpened = isOpened;
-  //   }
-  // }
 
   const fieldBoxes = $("#box_field");
 
