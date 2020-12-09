@@ -7,11 +7,16 @@ $(document).ready(function() {
   const fieldBoxes = $("#box_field");
 
   const selected = $(".selected");
+  let newField;
+  let newArrayBombs;
+
+  let level = 0;
+
+  game(level);
 
   selected.click(function() {
-    console.log("FUNZIONA")
     $(this).toggleClass("open");
-    $(".options").toggle();
+    $(".options").slideToggle();
   });
 
   $(document).on("mouseenter", ".options > li:not(.opened)", function() {
@@ -22,66 +27,115 @@ $(document).ready(function() {
     $(this).removeClass("hover");
   });
 
+  // creare una variabile per facile medio e difficile
+
   $("ul.options > li").click(function() {
+    let index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
-    $(this).removeClass("hover");
-    $(this).addClass("opened");
-    selected.children("span").text($(this).children("span").text());
-    $(".options").toggle();
+    $(this).removeClass("hover").addClass("opened");
+    // non so perchè mi mette uno spazio quando seleziono medio e difficile
+    selected.children("span").html($(this).children("span").text());
+    selected.toggleClass("open");
+    $(".options").slideUp();
+    game(index);
   });
 
-  let level = parseInt(prompt("Scegli il livello"));
+  // let level = parseInt(prompt("Scegli il livello"));
 
-  // Creo il campo
-  let newField = field(level);
+  function game(level) {
+    fieldBoxes.empty();
+    // Creo il campo
+    newField = field(level);
 
-  // genero le bombe
-  let newArrayBombs = arrayBombs(level, newField);
+    // genero le bombe
+    newArrayBombs = arrayBombs(level, newField);
 
-  generatefield (level, newField, newArrayBombs, fieldBoxes);
+    generatefield (level, newField, newArrayBombs, fieldBoxes);
 
-  fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
+    fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
-  $(".box_item").addClass("hide");
-  $(".fas").addClass("hide");
+    $(".box_item").addClass("hide");
+    $(".fas").addClass("hide");
 
-  $(".box").each(function(index) {
-    $(this).mousedown(function(event) {
-      if (event.which == 1 && newField[index].isFlagged == false) {
+  }
+
+  // $(".box_item").addClass("hide");
+  // $(".fas").addClass("hide");
+  // Rimetterlo mettendo on, perchè cosi lui leggerà sempre le box e rigenera sempre l'evento
+
+  $(document).on("mousedown", ".box", function(event) {
+    let index = $(this).index();
+    if (event.which == 1 && newField[index].isFlagged == false) {
+      newField[index].isOpened = true;
+      $(this).css("box-shadow","none");
+    }
+  });
+
+  $(document).on("mouseup", ".box", function(event) {
+    let index = $(this).index();
+    if (event.which == 1 && newField[index].isFlagged == false) {
+      $(this).children().removeClass("hide");
+      if (isZero(newField[index])) {
         newField[index].isOpened = true;
-        $(this).css("box-shadow","none");
+        openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
+        console.log("TRUE");
+      } else {
+        console.log("FALSE");
       }
-    });
-    $(this).mouseup(function(event) {
-      if (event.which == 1 && newField[index].isFlagged == false) {
-        $(this).children().removeClass("hide");
-        if (isZero(newField[index])) {
-          newField[index].isOpened = true;
-          openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-          console.log("TRUE");
+    } else if (event.which == 3) {
+      if (newField[index].isOpened == false && newField[index].isFlagged == false) {
+        $(this).html(`
+          <i class="fas fa-flag"></i>
+        `);
+        newField[index].isFlagged = true;
+      } else if (newField[index].isFlagged == true){
+        if (newField[index].isBomb == true) {
+          $(this).html(`<i class="${newField[index].bombs}"></i>`);
         } else {
-          console.log("FALSE");
+          $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
         }
-      } else if (event.which == 3) {
-        if (newField[index].isOpened == false && newField[index].isFlagged == false) {
-          $(this).html(`
-            <i class="fas fa-flag"></i>
-          `);
-          newField[index].isFlagged = true;
-        } else if (newField[index].isFlagged == true){
-          if (newField[index].isBomb == true) {
-            $(this).html(`<i class="${newField[index].bombs}"></i>`);
-          } else {
-            $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
-          }
-          $(this).children().addClass("hide");
-          newField[index].isFlagged = false;
-        }
+        $(this).children().addClass("hide");
+        newField[index].isFlagged = false;
       }
-    });
-
+    }
   });
+
+  // $(".box").each(function(index) {
+  //   $(this).mousedown(function(event) {
+  //     if (event.which == 1 && newField[index].isFlagged == false) {
+  //       newField[index].isOpened = true;
+  //       $(this).css("box-shadow","none");
+  //     }
+  //   });
+  //   $(this).mouseup(function(event) {
+  //     if (event.which == 1 && newField[index].isFlagged == false) {
+  //       $(this).children().removeClass("hide");
+  //       if (isZero(newField[index])) {
+  //         newField[index].isOpened = true;
+  //         openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
+  //         console.log("TRUE");
+  //       } else {
+  //         console.log("FALSE");
+  //       }
+  //     } else if (event.which == 3) {
+  //       if (newField[index].isOpened == false && newField[index].isFlagged == false) {
+  //         $(this).html(`
+  //           <i class="fas fa-flag"></i>
+  //         `);
+  //         newField[index].isFlagged = true;
+  //       } else if (newField[index].isFlagged == true){
+  //         if (newField[index].isBomb == true) {
+  //           $(this).html(`<i class="${newField[index].bombs}"></i>`);
+  //         } else {
+  //           $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
+  //         }
+  //         $(this).children().addClass("hide");
+  //         newField[index].isFlagged = false;
+  //       }
+  //     }
+  //   });
+  // });
 
   // Tolgo il menu che si apre con il tasto destro
   $(document).on("contextmenu",function(){

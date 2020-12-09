@@ -165,3 +165,26 @@ i {
 .hide {
   opacity: 0;
 }
+
+button {
+  margin: 0 30px;
+  width: 200px;
+  border: 2px solid #394a6d;
+  background-color: lightgrey;
+  font-size: 20px;
+  border-radius: 5px 15px 5px;
+  cursor: pointer;
+}
+
+button:hover {
+  animation: shake 1s ease-in-out alternate;
+}
+
+@keyframes shake {
+  10% {transform: scale(1.1) rotateZ(3deg)}
+  20% {transform: scale(1.1) rotateZ(-3deg)}
+  40% {transform: scale(1.1) rotateZ(3deg)}
+  60% {transform: scale(1.1) rotateZ(-3deg)}
+  80% {transform: scale(1.1) rotateZ(3deg)}
+  100% {transform: scale(1)}
+}
