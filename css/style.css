@@ -96,7 +96,7 @@ li > span {
   margin-left: 10px;
 }
 
-.options > li {
+li {
   height: 50px;
   line-height: 50px;
   cursor: pointer;
@@ -104,15 +104,20 @@ li > span {
   transition: background-color 0.5s;
 }
 
-li.opened {
+.opened {
   background-color: #394a6d;
-}
-
-li.opened > span {
   color: #FFFFFF;
 }
 
-.options {
+.hover {
+  background-color: rgba(0, 0, 0, 0.2);
+}
+
+.opened > span {
+  color: #FFFFFF;
+}
+
+ul.options {
   display: none;
 }
 

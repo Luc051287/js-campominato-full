@@ -14,13 +14,22 @@ $(document).ready(function() {
     $(".options").toggle();
   });
 
-  $(".options > li:not(.opened)").hover(function() {
-    $(this).css("background-color","rgba(0, 0, 0, 0.2)");},
-    function() {
-    $(this).css("background-color","white")
+  $(document).on("mouseenter", ".options > li:not(.opened)", function() {
+    $(this).addClass("hover");
   });
 
+  $(document).on("mouseleave", ".options > li:not(.opened)", function() {
+    $(this).removeClass("hover");
+  });
 
+  $("ul.options > li").click(function() {
+    let openedItem = $("ul.options > li.opened");
+    openedItem.removeClass("opened");
+    $(this).removeClass("hover");
+    $(this).addClass("opened");
+    selected.children("span").text($(this).children("span").text());
+    $(".options").toggle();
+  });
 
   let level = parseInt(prompt("Scegli il livello"));
 
