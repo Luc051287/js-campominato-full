@@ -6,6 +6,22 @@ $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
 
+  const selected = $(".selected");
+
+  selected.click(function() {
+    console.log("FUNZIONA")
+    $(this).toggleClass("open");
+    $(".options").toggle();
+  });
+
+  $(".options > li:not(.opened)").hover(function() {
+    $(this).css("background-color","rgba(0, 0, 0, 0.2)");},
+    function() {
+    $(this).css("background-color","white")
+  });
+
+
+
   let level = parseInt(prompt("Scegli il livello"));
 
   // Creo il campo

@@ -10,17 +10,116 @@ body {
 
 .container {
   width: 100%;
-  height: 100%;
+  height: 100vh;
 }
 
 header {
   height: 70px;
   border-bottom: 1px solid black;
+  display: flex;
+  justify-content: flex-end;
+  padding: 10px 10px;
+
+}
+
+span {
+  color: #394a6d;
+}
+
+.my_select {
+  position: relative;
+}
+
+.selected {
+  width: 210px;
+  height: 50px;
+  font-size: 25px;
+  line-height: 60px;
+  border: 2px solid #394a6d;
+  background-color: white;
+  padding: 0 10px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.arrow {
+  height: 15px;
+  width: 15px;
+  position: relative;
+}
+
+.arrow::before, .arrow::after {
+  content: "";
+  display: inline-block;
+  position: absolute;
+  height: 100%;
+  width: 2px;
+  background-color: #394a6d;
+  transition: 0.5s;
+}
+
+.arrow::before {
+  left: -5px;
+  transform: rotate(45deg);
+}
+
+.arrow::after {
+  left: 5px;
+  transform: rotate(-45deg);
+}
+
+.open .arrow::before {
+  left: -5px;
+  transform: rotate(-45deg);
+}
+
+.open .arrow::after {
+  left: 5px;
+  transform: rotate(45deg);
+}
+
+ul {
+  list-style: none;
+  width: 210px;
+  font-size: 25px;
+  border: 2px solid #394a6d;
+  border-top: none;
+  background-color: white;
+  position: absolute;
+  top: 50px;
+  left: 0;
+}
+
+li > span {
+  margin-left: 10px;
+}
+
+.options > li {
+  height: 50px;
+  line-height: 50px;
+  cursor: pointer;
+  background-color: white;
+  transition: background-color 0.5s;
+}
+
+li.opened {
+  background-color: #394a6d;
+}
+
+li.opened > span {
+  color: #FFFFFF;
+}
+
+.options {
+  display: none;
 }
 
 main {
   height: calc(100% - 70px);
   display: flex;
+  align-content: center;
 }
 
 #box_field {
