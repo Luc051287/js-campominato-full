@@ -75,7 +75,7 @@ $(document).ready(function() {
       $(this).css("background-color","white");
     }
   });
-
+  // Sullo schema grande l'azione è un po lenta quando clicclo su una bomba
   $(document).on("mouseup", ".box", function(event) {
     let index = $(this).index();
     if (event.which == 1 && newField[index].isFlagged == false) {
@@ -83,19 +83,15 @@ $(document).ready(function() {
       if (isZero(newField[index])) {
         newField[index].isOpened = true;
         openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-        console.log("TRUE");
       } else if (newField[index].isBomb == true) {
         newArrayBombs.forEach((bomb) => {
-          // provare a mettere croce rossa
           $(".box").eq(bomb.id).children().removeClass("hide");
-          $(".box").css("cursor","default");
-          $(".box").children().css("cursor","default");
-          $(document).off("mouseup", ".box");
-          $(document).off("mousedown", ".box");
         });
-        console.log("BOMBA");
+        $(".box").css("cursor","default");
+        $(".box").children().css("cursor","default");
+        $(document).off("mouseup", ".box");
+        $(document).off("mousedown", ".box");
       } else {
-        console.log("FALSE");
       }
     } else if (event.which == 3) {
       // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
