@@ -43,7 +43,11 @@ $(document).ready(function() {
 
   // let level = parseInt(prompt("Scegli il livello"));
 
+  // E' tutto qua dentro, cosi lui ogni volta ricrea l'evento
   function game(level) {
+    // vedere se ci sta un modo per non usarlo
+    // window.location.reload();
+    // $(document).on({field: newField}, "mousedown", ".box", mouseDown)
     fieldBoxes.empty();
     // Creo il campo
     newField = field(level);
@@ -58,17 +62,17 @@ $(document).ready(function() {
     $(".box_item").addClass("hide");
     $(".fas").addClass("hide");
 
-  }
+
 
   // $(".box_item").addClass("hide");
   // $(".fas").addClass("hide");
-  // Rimetterlo mettendo on, perchè cosi lui leggerà sempre le box e rigenera sempre l'evento
-
+  // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
   $(document).on("mousedown", ".box", function(event) {
     let index = $(this).index();
     if (event.which == 1 && newField[index].isFlagged == false) {
       newField[index].isOpened = true;
       $(this).css("box-shadow","none");
+      $(this).css("background-color","white");
     }
   });
 
@@ -80,10 +84,21 @@ $(document).ready(function() {
         newField[index].isOpened = true;
         openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
         console.log("TRUE");
+      } else if (newField[index].isBomb == true) {
+        newArrayBombs.forEach((bomb) => {
+          // provare a mettere croce rossa
+          $(".box").eq(bomb.id).children().removeClass("hide");
+          $(".box").css("cursor","default");
+          $(".box").children().css("cursor","default");
+          $(document).off("mouseup", ".box");
+          $(document).off("mousedown", ".box");
+        });
+        console.log("BOMBA");
       } else {
         console.log("FALSE");
       }
     } else if (event.which == 3) {
+      // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
       if (newField[index].isOpened == false && newField[index].isFlagged == false) {
         $(this).html(`
           <i class="fas fa-flag"></i>
@@ -100,47 +115,11 @@ $(document).ready(function() {
       }
     }
   });
-
-  // $(".box").each(function(index) {
-  //   $(this).mousedown(function(event) {
-  //     if (event.which == 1 && newField[index].isFlagged == false) {
-  //       newField[index].isOpened = true;
-  //       $(this).css("box-shadow","none");
-  //     }
-  //   });
-  //   $(this).mouseup(function(event) {
-  //     if (event.which == 1 && newField[index].isFlagged == false) {
-  //       $(this).children().removeClass("hide");
-  //       if (isZero(newField[index])) {
-  //         newField[index].isOpened = true;
-  //         openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-  //         console.log("TRUE");
-  //       } else {
-  //         console.log("FALSE");
-  //       }
-  //     } else if (event.which == 3) {
-  //       if (newField[index].isOpened == false && newField[index].isFlagged == false) {
-  //         $(this).html(`
-  //           <i class="fas fa-flag"></i>
-  //         `);
-  //         newField[index].isFlagged = true;
-  //       } else if (newField[index].isFlagged == true){
-  //         if (newField[index].isBomb == true) {
-  //           $(this).html(`<i class="${newField[index].bombs}"></i>`);
-  //         } else {
-  //           $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
-  //         }
-  //         $(this).children().addClass("hide");
-  //         newField[index].isFlagged = false;
-  //       }
-  //     }
-  //   });
-  // });
-
+  }
   // Tolgo il menu che si apre con il tasto destro
-  $(document).on("contextmenu",function(){
-    return false;
-  });
+  // $(document).on("contextmenu",function(){
+  //   return false;
+  // });
 
 });
 
@@ -206,22 +185,23 @@ function levelChoise(value) {
       gameLevel = randomInteger(0, 80);
       max = [9,9];
       bombs = 10;
-      width = 360;
-      height = 360;
+      width = 450;
+      // in caso togliere la height per cui la cambia da solo
+      height = 450;
       break;
     case 1:
       gameLevel = randomInteger(0, 255);
       max = [16,16];
       bombs = 40;
-      width = 640;
-      height = 640;
+      width = 800;
+      height = 800;
       break;
     case 2:
       gameLevel = randomInteger(0, 479);
       max = [16,30];
       bombs = 99;
-      width = 1200;
-      height = 640;
+      width = 1500;
+      height = 800;
       break;
   }
   return [gameLevel, max, bombs, width, height];
@@ -293,6 +273,7 @@ function openAdiacent(container, array, x, y) {
         adjArr.push(elem);
         if (elem.isFlagged == false) {
           container.eq(elem.id).css("box-shadow","none");
+          container.eq(elem.id).css("background-color","white");
           container.eq(elem.id).children().removeClass("hide");
         }
       }
