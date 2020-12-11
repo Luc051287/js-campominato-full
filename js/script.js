@@ -1,6 +1,7 @@
 // ES6 aggiunge la classe, per cui si potrebbe scrivere box come classe e metterci dentro sia le proprietà che qualche funzione! Provare a pensare se può essere utilizzato VueJS!
 // Mettere protezione per gli elementi undefined!
 // farlo funzionare con livelli di difficoltà più alti. Per colori numeri fare come esercizio icone
+// vedere se si può destrutturare
 
 $(document).ready(function() {
 
@@ -97,7 +98,7 @@ $(document).ready(function() {
       // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
       if (newField[index].isOpened == false && newField[index].isFlagged == false) {
         $(this).html(`
-          <i class="fas fa-flag"></i>
+          <i class="fas fa-syringe"></i>
         `);
         newField[index].isFlagged = true;
       } else if (newField[index].isFlagged == true){
@@ -113,9 +114,9 @@ $(document).ready(function() {
   });
   }
   // Tolgo il menu che si apre con il tasto destro
-  // $(document).on("contextmenu",function(){
-  //   return false;
-  // });
+  $(document).on("contextmenu",function(){
+    return false;
+  });
 
 });
 
@@ -235,7 +236,7 @@ function arrayBombs(level, field) {
   while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
     if (!includes(field[bomb].position, arraybombs)) {
-      field[bomb].bombs = "fas fa-bomb";
+      field[bomb].bombs = "fas fa-virus";
       field[bomb].isBomb = true;
       arraybombs.push(field[bomb]);
     }

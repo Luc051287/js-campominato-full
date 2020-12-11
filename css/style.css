@@ -200,3 +200,8 @@ button:hover {
   80% {transform: scale(1.1) rotateZ(3deg)}
   100% {transform: scale(1)}
 }
+
+img {
+  /*Si puo usare filter per cambiare il colore dell'immagine*/
+  filter: sepia(100%);
+}
