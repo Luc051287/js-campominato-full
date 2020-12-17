@@ -63,8 +63,6 @@ $(document).ready(function() {
     $(".box_item").addClass("hide");
     $(".fas").addClass("hide");
 
-
-
   // $(".box_item").addClass("hide");
   // $(".fas").addClass("hide");
   // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
@@ -76,7 +74,6 @@ $(document).ready(function() {
       $(this).css("background-color","white");
     }
   });
-  // Sullo schema grande l'azione è un po lenta quando clicclo su una bomba
   $(document).on("mouseup", ".box", function(event) {
     let index = $(this).index();
     if (event.which == 1 && newField[index].isFlagged == false) {
@@ -114,9 +111,11 @@ $(document).ready(function() {
   });
   }
   // Tolgo il menu che si apre con il tasto destro
-  $(document).on("contextmenu",function(){
-    return false;
-  });
+  // $(document).on("contextmenu",function(){
+  //   return false;
+  // });
+
+  // Manca la vittoria
 
 });
 

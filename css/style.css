@@ -17,15 +17,53 @@ header {
   height: 70px;
   border-bottom: 1px solid black;
   display: flex;
-  justify-content: flex-end;
-  padding: 10px 10px;
+  padding: 0 10px;
+}
 
+.button_select {
+  height: 100%;
+  display: flex;
+  align-items: center;
+  width: 470px;
+}
+
+.flags_time {
+  display: flex;
+  justify-content: space-around;
+  width: 470px;
+  padding: 5px 0;
+}
+
+.numbers {
+  height: 100%;
+  color: red;
+  text-align: center;
+  font-size: 50px;
+  letter-spacing: 2px;
+  font-family: 'Langar', cursive;
+}
+
+#flags {
+  background-color: black;
+  width: 100px;
+  height: 100%;
+  border-radius: 10px;
+}
+
+#time {
+  background-color: black;
+  width: 150px;
+  height: 100%;
+  border-radius: 10px;
 }
 
 h1 {
-  line-height: 50px;
+  height: 100%;
+  line-height: 70px;
   font-size: 70px;
   font-family: 'Nerko One', cursive;
+  width: calc(100% - 940px);
+  text-align: center;
 }
 
 span {
@@ -186,6 +224,7 @@ button {
   font-size: 20px;
   border-radius: 5px 15px 5px;
   cursor: pointer;
+  height: 50px;
 }
 
 button:hover {
