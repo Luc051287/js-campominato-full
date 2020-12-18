@@ -118,9 +118,9 @@ $(document).ready(function() {
   });
   }
   // Tolgo il menu che si apre con il tasto destro
-  // $(document).on("contextmenu",function(){
-  //   return false;
-  // });
+  $(document).on("contextmenu",function(){
+    return false;
+  });
 
   // Manca la vittoria
 
@@ -133,7 +133,8 @@ const box = {
   isBomb: false,
   id: 0,
   isOpened: false,
-  isFlagged: false
+  isFlagged: false,
+  isDoubt: false
 };
 
 const colors = ["", "blue","green","red","indigo","orange","brown","pink","black"];

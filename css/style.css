@@ -201,6 +201,28 @@ main {
   background-color: rgb(167, 167, 167);
 }
 
+.box:before {
+  content: '\f48e';
+  display: block;
+  font-size: 25px;
+  text-align: center;
+  line-height: 40px;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 400;
+  display: none;
+}
+
+.box:before {
+  content: '\e063';
+  display: block;
+  font-size: 25px;
+  text-align: center;
+  line-height: 40px;
+  font-family: 'Font Awesome 5 Free';
+  font-weight: 400;
+  display: none;
+}
+
 .box_item {
   text-align: center;
   line-height: 40px;
