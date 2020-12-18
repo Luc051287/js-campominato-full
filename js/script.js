@@ -15,6 +15,10 @@ $(document).ready(function() {
 
   game(level);
 
+  $("#reset").click(function() {
+    game(level);
+  })
+
   selected.click(function() {
     $(this).toggleClass("open");
     $(".options").slideToggle();
@@ -31,7 +35,7 @@ $(document).ready(function() {
   // creare una variabile per facile medio e difficile
 
   $("ul.options > li").click(function() {
-    let index = $(this).index();
+    index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
@@ -40,6 +44,9 @@ $(document).ready(function() {
     selected.toggleClass("open");
     $(".options").slideUp();
     game(index);
+    $("#reset").click(function() {
+      game(index);
+    })
   });
 
   // let level = parseInt(prompt("Scegli il livello"));

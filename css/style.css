@@ -18,19 +18,21 @@ header {
   border-bottom: 1px solid black;
   display: flex;
   padding: 0 10px;
+  background-color: #FFFFFF;
 }
 
 .button_select {
   height: 100%;
   display: flex;
+  justify-content: flex-end;
   align-items: center;
-  width: 470px;
+  /* width: 470px; */
 }
 
 .flags_time {
   display: flex;
-  justify-content: space-around;
-  width: 470px;
+  /* justify-content: space-around;
+  width: 470px; */
   padding: 5px 0;
 }
 
@@ -45,16 +47,17 @@ header {
 
 #flags {
   background-color: black;
-  width: 100px;
   height: 100%;
   border-radius: 10px;
+  padding: 0 10px;
 }
 
 #time {
   background-color: black;
-  width: 150px;
   height: 100%;
   border-radius: 10px;
+  padding: 0 10px;
+  margin-right: 15px;
 }
 
 h1 {
@@ -62,7 +65,7 @@ h1 {
   line-height: 70px;
   font-size: 70px;
   font-family: 'Nerko One', cursive;
-  width: calc(100% - 940px);
+  min-width: calc(100% - 657px);
   text-align: center;
 }
 
@@ -70,12 +73,16 @@ span {
   color: #394a6d;
 }
 
+#hours, #minutes, #seconds {
+  color: red;
+}
+
 .my_select {
   position: relative;
 }
 
 .selected {
-  width: 210px;
+  width: 170px;
   height: 50px;
   font-size: 25px;
   line-height: 60px;
@@ -126,7 +133,7 @@ span {
 
 ul {
   list-style: none;
-  width: 210px;
+  width: 170px;
   font-size: 25px;
   border: 2px solid #394a6d;
   border-top: none;
@@ -217,8 +224,8 @@ i {
 }
 
 button {
-  margin: 0 30px;
-  width: 200px;
+  margin: 0 20px;
+  width: 120px;
   border: 2px solid #394a6d;
   background-color: lightgrey;
   font-size: 20px;
