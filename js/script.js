@@ -6,13 +6,13 @@
 $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
-
+  const totFlags = $("#number_of_flags");
   const selected = $(".selected");
   let newField;
   let newArrayBombs;
-  let rightClickIndex = 0;
   let level = 0;
-
+  let flags = levelChoise(level)[2];
+  totFlags.text(flags);
   game(level);
 
   $("#reset").click(function() {
@@ -64,7 +64,8 @@ $(document).ready(function() {
     newArrayBombs = arrayBombs(level, newField);
 
     generatefield (level, newField, newArrayBombs, fieldBoxes);
-
+    flags = levelChoise(level)[2];
+    totFlags.text(flags);
     fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
 
     $(".box_item").addClass("hide");
@@ -75,7 +76,7 @@ $(document).ready(function() {
   // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
   $(document).on("mousedown", ".box", function(event) {
     let index = $(this).index();
-    if (event.which == 1 && newField[index].isFlagged == false) {
+    if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
       newField[index].isOpened = true;
       $(this).css("box-shadow","none");
       $(this).css("background-color","white");
@@ -83,7 +84,8 @@ $(document).ready(function() {
   });
   $(document).on("mouseup", ".box", function(event) {
     let index = $(this).index();
-    if (event.which == 1 && newField[index].isFlagged == false) {
+    console.log(index);
+    if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
       $(this).children().removeClass("hide");
       if (isZero(newField[index])) {
         newField[index].isOpened = true;
@@ -99,27 +101,32 @@ $(document).ready(function() {
       } else {
       }
     } else if (event.which == 3) {
+      console.log("VOLTE")
       // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
-      if (newField[index].isOpened == false && newField[index].isFlagged == false && rightClickIndex < 2) {
+      if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false) {
         // $(this).html(`
         //   <i class="fas fa-syringe"></i>
         // `);
-        rightClickIndex += 1;
-        $(".box").eq(index).addClass("syringe");
+        flags -= 1;
+        totFlags.text(flags);
+        $(this).addClass("syringe");
         newField[index].isFlagged = true;
-      } else if (newField[index].isFlagged == true){
+      } else if (newField[index].isFlagged == true && newField[index].isDoubt == false){
+        console.log("PROVA")
         // if (newField[index].isBomb == true) {
         //   $(this).html(`<i class="${newField[index].bombs}"></i>`);
         // } else {
         //   $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
         // }
-        rightClickIndex += 1;
-        $(".box").eq(index).removeClass("syringe");
-        $(".box").eq(index).addClass("mask");
+        flags += 1;
+        totFlags.text(flags);
+        $(this).removeClass("syringe");
+        $(this).addClass("mask");
         newField[index].isFlagged = false;
-      } else {
-        rightClickIndex = 0;
-        $(".box").eq(index).removeClass("mask");
+        newField[index].isDoubt = true;
+      } else if (newField[index].isDoubt == true && newField[index].isFlagged == false) {
+        $(this).removeClass("mask");
+        newField[index].isDoubt = false;
       }
     }
   });
@@ -197,7 +204,7 @@ function levelChoise(value) {
       max = [9,9];
       bombs = 10;
       width = 450;
-      // in caso togliere la height per cui la cambia da solo
+      // in caso togliere la height perché lui la cambia da solo
       height = 450;
       break;
     case 1:
