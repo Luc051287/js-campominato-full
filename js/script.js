@@ -10,7 +10,7 @@ $(document).ready(function() {
   const selected = $(".selected");
   let newField;
   let newArrayBombs;
-
+  let rightClickIndex = 0;
   let level = 0;
 
   game(level);
@@ -100,19 +100,26 @@ $(document).ready(function() {
       }
     } else if (event.which == 3) {
       // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
-      if (newField[index].isOpened == false && newField[index].isFlagged == false) {
-        $(this).html(`
-          <i class="fas fa-syringe"></i>
-        `);
+      if (newField[index].isOpened == false && newField[index].isFlagged == false && rightClickIndex < 2) {
+        // $(this).html(`
+        //   <i class="fas fa-syringe"></i>
+        // `);
+        rightClickIndex += 1;
+        $(".box").eq(index).addClass("syringe");
         newField[index].isFlagged = true;
       } else if (newField[index].isFlagged == true){
-        if (newField[index].isBomb == true) {
-          $(this).html(`<i class="${newField[index].bombs}"></i>`);
-        } else {
-          $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
-        }
-        $(this).children().addClass("hide");
+        // if (newField[index].isBomb == true) {
+        //   $(this).html(`<i class="${newField[index].bombs}"></i>`);
+        // } else {
+        //   $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
+        // }
+        rightClickIndex += 1;
+        $(".box").eq(index).removeClass("syringe");
+        $(".box").eq(index).addClass("mask");
         newField[index].isFlagged = false;
+      } else {
+        rightClickIndex = 0;
+        $(".box").eq(index).removeClass("mask");
       }
     }
   });
