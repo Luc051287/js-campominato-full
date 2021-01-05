@@ -108,17 +108,18 @@ $(document).ready(function() {
             flags -= 1;
             totFlags.text(flags);
             $(this).addClass("syringe");
+            $(".box::before").eq(index).css("display", "block");
             newField[index].isFlagged = true;
-          } else if (newField[index].isFlagged == true && newField[index].isDoubt == false){
+          } else if (newField[index].isFlagged == true){
             console.log("PROVA")
             console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
             flags += 1;
             totFlags.text(flags);
             $(this).removeClass("syringe");
             $(this).addClass("mask");
-            newField[index].isFlagged = false;
             newField[index].isDoubt = true;
-          } else if (newField[index].isDoubt == true && newField[index].isFlagged == false) {
+            newField[index].isFlagged = false;
+          } else if (newField[index].isDoubt == true) {
             console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
             $(this).removeClass("mask");
             newField[index].isDoubt = false;

@@ -200,15 +200,23 @@ main {
   border-radius: 5px;
   margin: 5px;
   background-color: rgb(167, 167, 167);
+  position: relative;
+  user-select: none;
 }
 
-.box::before {
+.box::before{
+  content: '\f48e';
   font-size: 25px;
   text-align: center;
+  width: 40px;
+  height: 40px;
   line-height: 40px;
   font-family: 'Font Awesome 5 Free';
   font-weight: 400;
   display: none;
+  position: absolute;
+  top: 0;
+  left: 0;
 }
 
 .syringe::before {
