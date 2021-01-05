@@ -6,8 +6,15 @@
 $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
+  const box = $(".box");
   const totFlags = $("#number_of_flags");
   const selected = $(".selected");
+  seconds = $("#seconds");
+  minutes = $("#minutes");
+  hours = $("#hours");
+  secondsInt = 0;
+  minutesInt = 0;
+  hoursInt = 0;
   let newField;
   let newArrayBombs;
   let level = 0;
@@ -18,6 +25,10 @@ $(document).ready(function() {
   $("#reset").click(function() {
     game(level);
   })
+
+  const timer = setInterval(function() {
+    timerCount(time, seconds, minutes, hours);
+  }, 1000);
 
   selected.click(function() {
     $(this).toggleClass("open");
@@ -73,6 +84,7 @@ $(document).ready(function() {
   // $(".fas").addClass("hide");
   // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
     $(".box").mousedown( function(event) {
+      // globale, viene letto anche dal mouseup
       index = $(this).index();
       console.log(index);
       if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
@@ -83,7 +95,6 @@ $(document).ready(function() {
     });
 
     $(".box").mouseup( function(event) {
-      // let index = $(this).index();
       switch (event.which) {
         case 1:
           if (newField[index].isFlagged == false && newField[index].isDoubt == false) {
@@ -300,5 +311,22 @@ function openAdiacent(container, array, x, y) {
       openAdiacent(container, array, item.position[0], item.position[1]);
     }
     item.isOpened = true;
+  }
+}
+
+function timerCount() {
+  if (secondsInt == 99) {
+    // clearTimeout(timer);
+    seconds.text("00");
+    minutes.text();
+    secondsInt = 0;
+  } else {
+    secondsInt++;
+    if (secondsInt == 60) {
+      secondsInt = 0;
+      minutesInt++;
+      minutes.text((minutesInt >= 10) ? minutesInt : "0" + minutesInt)
+    }
+    seconds.text((secondsInt >= 10) ? secondsInt : "0" + secondsInt);
   }
 }
