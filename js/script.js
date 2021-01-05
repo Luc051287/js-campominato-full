@@ -73,7 +73,7 @@ $(document).ready(function() {
   // $(".fas").addClass("hide");
   // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
     $(".box").mousedown( function(event) {
-      let index = $(this).index();
+      index = $(this).index();
       console.log(index);
       if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
         newField[index].isOpened = true;
@@ -83,17 +83,19 @@ $(document).ready(function() {
     });
 
     $(".box").mouseup( function(event) {
-      let index = $(this).index();
+      // let index = $(this).index();
       switch (event.which) {
         case 1:
           if (newField[index].isFlagged == false && newField[index].isDoubt == false) {
-            $(this).children().removeClass("hide");
+            $(".box").eq(index).children().removeClass("hide");
             if (isZero(newField[index])) {
               newField[index].isOpened = true;
               openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
             } else if (newField[index].isBomb == true) {
               newArrayBombs.forEach((bomb) => {
-                $(".box").eq(bomb.id).children().removeClass("hide");
+                if (bomb.isFlagged == false && bomb.isDoubt == false) {
+                  $(".box").eq(bomb.id).children().removeClass("hide");
+                }
               });
               $(".box").css("cursor","default");
               $(".box").children().css("cursor","default");
@@ -104,25 +106,23 @@ $(document).ready(function() {
         break;
         case 3:
           if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false) {
-            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
             flags -= 1;
             totFlags.text(flags);
-            $(this).addClass("syringe");
-            $(".box::before").eq(index).css("display", "block");
+            $(".box").eq(index).addClass("syringe");
             newField[index].isFlagged = true;
+            console.log(newField[index].isDoubt, index)
           } else if (newField[index].isFlagged == true){
-            console.log("PROVA")
-            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
             flags += 1;
             totFlags.text(flags);
-            $(this).removeClass("syringe");
-            $(this).addClass("mask");
+            $(".box").eq(index).removeClass("syringe");
+            $(".box").eq(index).addClass("mask");
             newField[index].isDoubt = true;
             newField[index].isFlagged = false;
+            console.log(newField[index].isDoubt, index)
           } else if (newField[index].isDoubt == true) {
-            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
-            $(this).removeClass("mask");
+            $(".box").eq(index).removeClass("mask");
             newField[index].isDoubt = false;
+            console.log(newField[index].isDoubt, index)
           }
           break;
       }
@@ -286,7 +286,7 @@ function openAdiacent(container, array, x, y) {
     for (pos of arrayPosAdj) {
       if (equalArray(0, elem, pos[0], pos[1])) {
         adjArr.push(elem);
-        if (elem.isFlagged == false) {
+        if (elem.isFlagged == false && elem.isDoubt == false) {
           container.eq(elem.id).css("box-shadow","none");
           container.eq(elem.id).css("background-color","white");
           container.eq(elem.id).children().removeClass("hide");
