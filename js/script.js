@@ -35,7 +35,7 @@ $(document).ready(function() {
   // creare una variabile per facile medio e difficile
 
   $("ul.options > li").click(function() {
-    index = $(this).index();
+    let index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
@@ -53,8 +53,6 @@ $(document).ready(function() {
 
   // E' tutto qua dentro, cosi lui ogni volta ricrea l'evento
   function game(level) {
-    // vedere se ci sta un modo per non usarlo
-    // window.location.reload();
     // $(document).on({field: newField}, "mousedown", ".box", mouseDown)
     fieldBoxes.empty();
     // Creo il campo
@@ -74,62 +72,60 @@ $(document).ready(function() {
   // $(".box_item").addClass("hide");
   // $(".fas").addClass("hide");
   // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
-  $(document).on("mousedown", ".box", function(event) {
-    let index = $(this).index();
-    if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
-      newField[index].isOpened = true;
-      $(this).css("box-shadow","none");
-      $(this).css("background-color","white");
-    }
-  });
-  $(document).on("mouseup", ".box", function(event) {
-    let index = $(this).index();
-    console.log(index);
-    if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
-      $(this).children().removeClass("hide");
-      if (isZero(newField[index])) {
+    $(".box").mousedown( function(event) {
+      let index = $(this).index();
+      console.log(index);
+      if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
         newField[index].isOpened = true;
-        openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-      } else if (newField[index].isBomb == true) {
-        newArrayBombs.forEach((bomb) => {
-          $(".box").eq(bomb.id).children().removeClass("hide");
-        });
-        $(".box").css("cursor","default");
-        $(".box").children().css("cursor","default");
-        $(document).off("mouseup", ".box");
-        $(document).off("mousedown", ".box");
-      } else {
+        $(this).css("box-shadow","none");
+        $(this).css("background-color","white");
       }
-    } else if (event.which == 3) {
-      console.log("VOLTE")
-      // per evitare tutto questo codice potrei mettere tipo un div che si sovrappone cosi non devo cambiare l'innerHTML!!
-      if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false) {
-        // $(this).html(`
-        //   <i class="fas fa-syringe"></i>
-        // `);
-        flags -= 1;
-        totFlags.text(flags);
-        $(this).addClass("syringe");
-        newField[index].isFlagged = true;
-      } else if (newField[index].isFlagged == true && newField[index].isDoubt == false){
-        console.log("PROVA")
-        // if (newField[index].isBomb == true) {
-        //   $(this).html(`<i class="${newField[index].bombs}"></i>`);
-        // } else {
-        //   $(this).html(`<p class="box_item" style="color:${colors[newField[index].bombs]}">${(newField[index].bombs == 0) ? "" : newField[index].bombs}</p>`);
-        // }
-        flags += 1;
-        totFlags.text(flags);
-        $(this).removeClass("syringe");
-        $(this).addClass("mask");
-        newField[index].isFlagged = false;
-        newField[index].isDoubt = true;
-      } else if (newField[index].isDoubt == true && newField[index].isFlagged == false) {
-        $(this).removeClass("mask");
-        newField[index].isDoubt = false;
+    });
+
+    $(".box").mouseup( function(event) {
+      let index = $(this).index();
+      switch (event.which) {
+        case 1:
+          if (newField[index].isFlagged == false && newField[index].isDoubt == false) {
+            $(this).children().removeClass("hide");
+            if (isZero(newField[index])) {
+              newField[index].isOpened = true;
+              openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
+            } else if (newField[index].isBomb == true) {
+              newArrayBombs.forEach((bomb) => {
+                $(".box").eq(bomb.id).children().removeClass("hide");
+              });
+              $(".box").css("cursor","default");
+              $(".box").children().css("cursor","default");
+              $(".box").off("mouseup");
+              $(".box").off("mousedown");
+            }
+          }
+        break;
+        case 3:
+          if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false) {
+            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
+            flags -= 1;
+            totFlags.text(flags);
+            $(this).addClass("syringe");
+            newField[index].isFlagged = true;
+          } else if (newField[index].isFlagged == true && newField[index].isDoubt == false){
+            console.log("PROVA")
+            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
+            flags += 1;
+            totFlags.text(flags);
+            $(this).removeClass("syringe");
+            $(this).addClass("mask");
+            newField[index].isFlagged = false;
+            newField[index].isDoubt = true;
+          } else if (newField[index].isDoubt == true && newField[index].isFlagged == false) {
+            console.log(newField[index].isOpened, newField[index].isFlagged, newField[index].isDoubt, index)
+            $(this).removeClass("mask");
+            newField[index].isDoubt = false;
+          }
+          break;
       }
-    }
-  });
+    });
   }
   // Tolgo il menu che si apre con il tasto destro
   $(document).on("contextmenu",function(){
