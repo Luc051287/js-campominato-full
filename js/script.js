@@ -22,14 +22,12 @@ $(document).ready(function() {
   totFlags.text(flags);
   game(level);
 
+  const timer = new Timer(timerCount, 1000);
+
   $("#reset").click(function() {
-    timeReset();
+    timer.restart();
     game(level);
   })
-
-  const timer = setInterval(function() {
-    timerCount();
-  }, 1000);
 
   selected.click(function() {
     $(this).toggleClass("open");
@@ -47,7 +45,7 @@ $(document).ready(function() {
   // creare una variabile per facile medio e difficile
 
   $("ul.options > li").click(function() {
-    timeReset()
+    timer.restart();
     let index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
@@ -59,12 +57,10 @@ $(document).ready(function() {
     // mettere tutto questo blocco in una funzione
     game(index);
     $("#reset").click(function() {
-      timeReset()
+      timer.restart();
       game(index);
     })
   });
-
-  // let level = parseInt(prompt("Scegli il livello"));
 
   // E' tutto qua dentro, cosi lui ogni volta ricrea l'evento
   function game(level) {
@@ -112,6 +108,7 @@ $(document).ready(function() {
                   $(".box").eq(bomb.id).children().removeClass("hide");
                 }
               });
+              timer.stop();
               $(".box").css("cursor","default");
               $(".box").children().css("cursor","default");
               $(".box").off("mouseup");
@@ -321,8 +318,9 @@ function openAdiacent(container, array, x, y) {
 function timerCount() {
   // mettere che si ferma anche col gameover, o qui o sopra!
   if (hoursInt == 99) {
-    clearTimeout(timer);
+    timer.stop();
   } else {
+    console.log("SONO QUI")
     secondsInt++;
     if (secondsInt == 60) {
       secondsInt = 0;
@@ -346,6 +344,23 @@ function timeReset() {
   minutes.text("00");
   hoursInt = 0;
   hours.text("00");
+}
+
+function Timer(func, time) {
+  let obj = setInterval(func,time);
+
+  this.stop = function() {
+    clearInterval(obj);
+    return this;
+  }
+
+  this.restart = function() {
+    this.stop();
+    timeReset();
+    obj = setInterval(func,time);
+    return this;
+  }
+
 }
 
 $.fn.myText = function (time) {
