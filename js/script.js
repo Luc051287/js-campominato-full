@@ -23,11 +23,12 @@ $(document).ready(function() {
   game(level);
 
   $("#reset").click(function() {
+    timeReset();
     game(level);
   })
 
   const timer = setInterval(function() {
-    timerCount(time, seconds, minutes, hours);
+    timerCount();
   }, 1000);
 
   selected.click(function() {
@@ -46,6 +47,7 @@ $(document).ready(function() {
   // creare una variabile per facile medio e difficile
 
   $("ul.options > li").click(function() {
+    timeReset()
     let index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
@@ -54,8 +56,10 @@ $(document).ready(function() {
     selected.children("span").html($(this).children("span").text());
     selected.toggleClass("open");
     $(".options").slideUp();
+    // mettere tutto questo blocco in una funzione
     game(index);
     $("#reset").click(function() {
+      timeReset()
       game(index);
     })
   });
@@ -315,18 +319,35 @@ function openAdiacent(container, array, x, y) {
 }
 
 function timerCount() {
-  if (secondsInt == 99) {
-    // clearTimeout(timer);
-    seconds.text("00");
-    minutes.text();
-    secondsInt = 0;
+  // mettere che si ferma anche col gameover, o qui o sopra!
+  if (hoursInt == 99) {
+    clearTimeout(timer);
   } else {
     secondsInt++;
     if (secondsInt == 60) {
       secondsInt = 0;
       minutesInt++;
-      minutes.text((minutesInt >= 10) ? minutesInt : "0" + minutesInt)
+      minutes.myText(minutesInt);
     }
-    seconds.text((secondsInt >= 10) ? secondsInt : "0" + secondsInt);
+    if (minutesInt == 60) {
+      minutesInt = 0;
+      minutes.myText(minutesInt);
+      hoursInt++;
+      hours.myText(hoursInt);
+    }
+    seconds.myText(secondsInt);
   }
 }
+
+function timeReset() {
+  secondsInt = 0;
+  seconds.text("00");
+  minutesInt = 0;
+  minutes.text("00");
+  hoursInt = 0;
+  hours.text("00");
+}
+
+$.fn.myText = function (time) {
+    this.text((time >= 10) ? time : "0" + time);
+};
