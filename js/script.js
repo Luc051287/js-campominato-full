@@ -136,6 +136,7 @@ $(document).ready(function() {
           }
           break;
       }
+      win(newField, flags, timer);
     });
   }
   // Tolgo il menu che si apre con il tasto destro
@@ -143,7 +144,8 @@ $(document).ready(function() {
     return false;
   });
 
-  // Manca la vittoria
+  // Condizioni per la vittoria:
+  // nessuna casella con isBomb è aperta e tutte le altre sono aperte e flags = 0
 
 });
 
@@ -355,6 +357,24 @@ function Timer(func, time) {
     timeReset();
     obj = setInterval(func,time);
     return this;
+  }
+}
+
+function win(field, flags, timer) {
+  if (flags == 0) {
+    for (item of field) {
+      if (item.isBomb == true) {
+        if (item.isFlagged == true) {
+          continue
+        } else {
+          return
+        }
+      } else {
+        continue
+      }
+    }
+    timer.stop();
+    console.log("HAI VINTO")
   }
 }
 
