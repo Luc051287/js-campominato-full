@@ -374,6 +374,8 @@ function win(field, flags, timer) {
       }
     }
     timer.stop();
+    $(".box").off("mouseup");
+    $(".box").off("mousedown");
     console.log("HAI VINTO")
   }
 }
