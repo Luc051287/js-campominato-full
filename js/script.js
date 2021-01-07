@@ -6,7 +6,7 @@
 $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
-  const box = $(".box");
+  // const box = $(".box");
   const totFlags = $("#number_of_flags");
   const selected = $(".selected");
   seconds = $("#seconds");
@@ -86,7 +86,6 @@ $(document).ready(function() {
     $(".box").mousedown( function(event) {
       // globale, viene letto anche dal mouseup
       index = $(this).index();
-      console.log(index);
       if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
         newField[index].isOpened = true;
         $(this).css("box-shadow","none");
@@ -117,24 +116,23 @@ $(document).ready(function() {
           }
         break;
         case 3:
-          if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false) {
+          if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false && flags > 0) {
             flags -= 1;
             totFlags.text(flags);
             $(".box").eq(index).addClass("syringe");
             newField[index].isFlagged = true;
-            console.log(newField[index].isDoubt, index)
-          } else if (newField[index].isFlagged == true){
-            flags += 1;
-            totFlags.text(flags);
+          } else if (newField[index].isFlagged == true || flags == 0 && newField[index].isDoubt == false){
+            if (newField[index].isFlagged == true) {
+              flags += 1;
+              totFlags.text(flags);
+            }
             $(".box").eq(index).removeClass("syringe");
             $(".box").eq(index).addClass("mask");
             newField[index].isDoubt = true;
             newField[index].isFlagged = false;
-            console.log(newField[index].isDoubt, index)
           } else if (newField[index].isDoubt == true) {
             $(".box").eq(index).removeClass("mask");
             newField[index].isDoubt = false;
-            console.log(newField[index].isDoubt, index)
           }
           break;
       }
@@ -320,7 +318,6 @@ function timerCount() {
   if (hoursInt == 99) {
     timer.stop();
   } else {
-    console.log("SONO QUI")
     secondsInt++;
     if (secondsInt == 60) {
       secondsInt = 0;
@@ -353,14 +350,12 @@ function Timer(func, time) {
     clearInterval(obj);
     return this;
   }
-
   this.restart = function() {
     this.stop();
     timeReset();
     obj = setInterval(func,time);
     return this;
   }
-
 }
 
 $.fn.myText = function (time) {
