@@ -272,15 +272,6 @@ button:hover {
   animation: shake 1s ease-in-out alternate;
 }
 
-@keyframes shake {
-  10% {transform: scale(1.1) rotateZ(3deg)}
-  20% {transform: scale(1.1) rotateZ(-3deg)}
-  40% {transform: scale(1.1) rotateZ(3deg)}
-  60% {transform: scale(1.1) rotateZ(-3deg)}
-  80% {transform: scale(1.1) rotateZ(3deg)}
-  100% {transform: scale(1)}
-}
-
 #winner {
   background-color: rgba(0,0,0,0.4);
   width: 100%;
@@ -326,6 +317,28 @@ button:hover {
   top: 15%;
 }
 
+#earth::before {
+  content: ' ';
+  display: inline-block;
+  position: absolute;
+  background-color: #FFFFFF;
+  width: 50px;
+  height: 3px;
+  top: 47%;
+  left: 20%;
+}
+
+#earth::after {
+  content: ' ';
+  display: inline-block;
+  position: absolute;
+  background-color: #FFFFFF;
+  width: 50px;
+  height: 3px;
+  top: 29%;
+  left: 47%;
+}
+
 #earth > i {
   font-size: 70px;
   color: #FFFFFF;
@@ -337,21 +350,74 @@ button:hover {
 #earth > i:nth-child(3) {
   top: 13%;
   left: 17%;
+  animation: cloudOne 2s ease-in-out infinite;
 }
 
 #earth > i:nth-child(4) {
   top: 30%;
   left: -29%;
+  animation: cloudTwo 2s ease-in-out infinite;
 }
 
 #earth > i:nth-child(5) {
   top: 45%;
+  animation: cloudThree 2s ease-in-out infinite;
 }
+
+
+
+/*ANIMATIONS*/
+
+@keyframes shake {
+  10% {transform: scale(1.1) rotateZ(3deg)}
+  20% {transform: scale(1.1) rotateZ(-3deg)}
+  40% {transform: scale(1.1) rotateZ(3deg)}
+  60% {transform: scale(1.1) rotateZ(-3deg)}
+  80% {transform: scale(1.1) rotateZ(3deg)}
+  100% {transform: scale(1)}
+}
+
 @keyframes rotate {
   from {
     background-position: 0px;
   }
   to {
     background-position: 1000px;
+  }
+}
+
+@keyframes cloudOne {
+  0% {
+    top: 13%;
+  }
+  50% {
+    top: 15%;
+  }
+  100% {
+    top: 13%;
+  }
+}
+
+@keyframes cloudTwo {
+  0% {
+    top: 30%;
+  }
+  50% {
+    top: 32%;
+  }
+  100% {
+    top: 30%;
+  }
+}
+
+@keyframes cloudThree {
+  0% {
+    top: 45%;
+  }
+  50% {
+    top: 47%;
+  }
+  100% {
+    top: 45%;
   }
 }
