@@ -257,7 +257,7 @@ i {
   opacity: 0;
 }
 
-button {
+#reset {
   margin: 0 20px;
   width: 120px;
   border: 2px solid #394a6d;
@@ -268,7 +268,7 @@ button {
   height: 50px;
 }
 
-button:hover {
+#reset:hover {
   animation: shake 1s ease-in-out alternate;
 }
 
@@ -279,15 +279,17 @@ button:hover {
   position: absolute;
   top: 0;
   left: 0;
-  display: flex;
-  /* display: none; */
+  /* display: flex; */
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  display: none;
 }
 
 #earth {
   background-image: url('../img/earth.png');
   background-repeat: repeat;
   position: relative;
-  margin: auto;
   width: 400px;
   height: 400px;
   border-radius: 50%;
@@ -371,7 +373,22 @@ button:hover {
   animation: cloudThree 1.5s ease-in-out infinite;
 }
 
+#restart {
+  margin: 20px;
+  width: 140px;
+  border: 5px solid #394a6d;
+  background-color: lightgrey;
+  font-size: 20px;
+  border-radius: 20px;
+  cursor: pointer;
+  height: 60px;
+  filter: drop-shadow(10px 10px 0px black);
+  transition: transform .08s ease-in-out;
+}
 
+#restart:hover {
+  transform: scale(1.1);
+}
 
 /*ANIMATIONS*/
 

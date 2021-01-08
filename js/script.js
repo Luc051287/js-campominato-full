@@ -6,7 +6,6 @@
 $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
-  // const box = $(".box");
   const totFlags = $("#number_of_flags");
   const selected = $(".selected");
   seconds = $("#seconds");
@@ -29,6 +28,12 @@ $(document).ready(function() {
     game(level);
   })
 
+  $("#restart").click(function() {
+    timer.restart();
+    game(level);
+    $("#winner").hide();
+  })
+
   selected.click(function() {
     $(this).toggleClass("open");
     $(".options").slideToggle();
@@ -42,27 +47,28 @@ $(document).ready(function() {
     $(this).removeClass("hover");
   });
 
-  // creare una variabile per facile medio e difficile
-
   $("ul.options > li").click(function() {
     timer.restart();
     let index = $(this).index();
     let openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
-    // non so perchè mi mette uno spazio quando seleziono medio e difficile
     selected.children("span").html($(this).children("span").text());
     selected.toggleClass("open");
     $(".options").slideUp();
-    // mettere tutto questo blocco in una funzione
     game(index);
     $("#reset").click(function() {
       timer.restart();
       game(index);
-    })
+    });
+    $("#restart").click(function() {
+      timer.restart();
+      game(index);
+      $("#winner").hide();
+    });
   });
 
-  // E' tutto qua dentro, cosi lui ogni volta ricrea l'evento
+  // Gioco
   function game(level) {
     // $(document).on({field: newField}, "mousedown", ".box", mouseDown)
     fieldBoxes.empty();
@@ -80,9 +86,6 @@ $(document).ready(function() {
     $(".box_item").addClass("hide");
     $(".fas").addClass("hide");
 
-  // $(".box_item").addClass("hide");
-  // $(".fas").addClass("hide");
-  // avendo messo dentro game posso anche togliere l'on perchè lui ricrea tutto ogni volta (l'altra alla fine è una shorthand). Cmq le funzioni si possono anche mettere sotto, e usare event.data.param per richiamare il parametro
     $(".box").mousedown( function(event) {
       // globale, viene letto anche dal mouseup
       index = $(this).index();
@@ -144,9 +147,6 @@ $(document).ready(function() {
     return false;
   });
 
-  // Condizioni per la vittoria:
-  // nessuna casella con isBomb è aperta e tutte le altre sono aperte e flags = 0
-
 });
 
 //----------- FUNCTIONS ------------------------------------>
@@ -195,8 +195,7 @@ function generatefield (level, field, arraybombs, fieldBoxes) {
 
 function includes(value, array) {
   for (elem of array) {
-    // rictrollare , magari passare opzionali cosi da poterla riusare qui
-      if (equalArray(value, elem, 0, 0)) {
+    if (equalArray(value, elem, 0, 0)) {
       return true;
     }
   }
@@ -274,7 +273,6 @@ function arrayBombs(level, field) {
   return arraybombs;
 }
 
-// rifarla senza some in caso cosi vale per tutti i casi in cui mi serve
 const checkBombs = (array, x, y) => array.some(item => equalArray(0, item, x, y));
 
 function isZero(object) {
@@ -290,7 +288,6 @@ function equalArray(value, item, x, y) {
   }
 }
 
-// manca da fare il caso in cui l'adiacente non è aperto e ci ho messo una bandierina
 function openAdiacent(container, array, x, y) {
   let adjArr = [];
   const arrayPosAdj = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
@@ -374,8 +371,10 @@ function win(field, flags, timer) {
       }
     }
     timer.stop();
-    $(".box").off("mouseup");
-    $(".box").off("mousedown");
+    // Vedere se servono
+    // $(".box").off("mouseup");
+    // $(".box").off("mousedown");
+    $("#winner").css("display","flex")
     console.log("HAI VINTO")
   }
 }
