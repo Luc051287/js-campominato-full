@@ -300,12 +300,16 @@ button:hover {
 
 #coviddi {
   color: #FFFFFF;
-  font-size: 80px;
-  font-family: 'Hanalei Fill', cursive;
-  width: 700px;
+  /* font-size: 80px; */
+  font-size: 60px;
+  /* font-family: 'Hanalei Fill', cursive; */
+  font-family: 'Potta One', cursive;
+  /* width: 700px; */
+  width: 750px;
   position: absolute;
   transform: rotateZ(-6deg);
-  top: 60%;
+  /* top: 60%; */
+  top: 64%;
   left: -33%;
   filter: drop-shadow(10px 10px 0px black);
 }
@@ -315,6 +319,7 @@ button:hover {
   position: absolute;
   left: 30%;
   top: 15%;
+  animation: airplane 2s linear infinite;
 }
 
 #earth::before {
@@ -323,9 +328,10 @@ button:hover {
   position: absolute;
   background-color: #FFFFFF;
   width: 50px;
-  height: 3px;
+  height: 2px;
   top: 47%;
   left: 20%;
+  animation: trailOne 2s linear infinite;
 }
 
 #earth::after {
@@ -334,9 +340,10 @@ button:hover {
   position: absolute;
   background-color: #FFFFFF;
   width: 50px;
-  height: 3px;
+  height: 2px;
   top: 29%;
   left: 47%;
+  animation: trailTwo 2s linear infinite;
 }
 
 #earth > i {
@@ -350,18 +357,18 @@ button:hover {
 #earth > i:nth-child(3) {
   top: 13%;
   left: 17%;
-  animation: cloudOne 2s ease-in-out infinite;
+  animation: cloudOne 1.5s ease-in-out infinite;
 }
 
 #earth > i:nth-child(4) {
   top: 30%;
   left: -29%;
-  animation: cloudTwo 2s ease-in-out infinite;
+  animation: cloudTwo 1.5s ease-in-out infinite;
 }
 
 #earth > i:nth-child(5) {
   top: 45%;
-  animation: cloudThree 2s ease-in-out infinite;
+  animation: cloudThree 1.5s ease-in-out infinite;
 }
 
 
@@ -385,6 +392,8 @@ button:hover {
     background-position: 1000px;
   }
 }
+
+/*Vedere se si può fare qualcosa per mettere solo una animazione*/
 
 @keyframes cloudOne {
   0% {
@@ -419,5 +428,41 @@ button:hover {
   }
   100% {
     top: 45%;
+  }
+}
+
+@keyframes trailOne {
+  0% {
+    top: 47%;
+  }
+  50% {
+    top: 45%;
+  }
+  100% {
+    top: 47%;
+  }
+}
+
+@keyframes trailTwo {
+  0% {
+    top: 29%;
+  }
+  50% {
+    top: 27%;
+  }
+  100% {
+    top: 29%;
+  }
+}
+
+@keyframes airplane {
+  0% {
+    top: 15%;
+  }
+  50% {
+    top: 13%;
+  }
+  100% {
+    top: 15%;
   }
 }
