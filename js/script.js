@@ -92,10 +92,11 @@ $(document).ready(function() {
         $(this).css("background-color","white");
       }
     });
-
-    // Da errore ogni volta che clicco su qualcosa che non è una casella, aggiustare, magari vedere quell'esercizio della barra di Revolut
-    // $(document).mouseup...
-    $(".box").mouseup( function(event) {
+    
+    $(document).mouseup( function(event) {
+      if (typeof index === 'undefined') {
+        return
+      }
       const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
       switch (event.which) {
         case 1:
