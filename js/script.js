@@ -1,7 +1,5 @@
-// ES6 aggiunge la classe, per cui si potrebbe scrivere box come classe e metterci dentro sia le proprietà che qualche funzione! Provare a pensare se può essere utilizzato VueJS!
-// Mettere protezione per gli elementi undefined!
-// farlo funzionare con livelli di difficoltà più alti. Per colori numeri fare come esercizio icone
-// vedere se si può destrutturare
+// Vedere se si può destrutturare
+// const {name, prefix, family, color} = item;
 
 $(document).ready(function() {
 
@@ -48,9 +46,10 @@ $(document).ready(function() {
   });
 
   $("ul.options > li").click(function() {
+    // ATTENZIONE!!!! Quando il livello è medio o difficile l'animazione del bottone parte in ritardo! Da controllare!
     timer.restart();
-    let index = $(this).index();
-    let openedItem = $("ul.options > li.opened");
+    const index = $(this).index();
+    const openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
     selected.children("span").html($(this).children("span").text());
@@ -89,7 +88,8 @@ $(document).ready(function() {
     $(".box").mousedown( function(event) {
       // globale, viene letto anche dal mouseup
       index = $(this).index();
-      if (event.which == 1 && newField[index].isFlagged == false && newField[index].isDoubt == false) {
+      const {isFlagged, isDoubt} = newField[index];
+      if (event.which == 1 && isFlagged == false && isDoubt == false) {
         newField[index].isOpened = true;
         $(this).css("box-shadow","none");
         $(this).css("background-color","white");
@@ -97,17 +97,19 @@ $(document).ready(function() {
     });
 
     $(".box").mouseup( function(event) {
+      const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
       switch (event.which) {
         case 1:
-          if (newField[index].isFlagged == false && newField[index].isDoubt == false) {
+          if (isFlagged == false && isDoubt == false) {
             $(".box").eq(index).children().removeClass("hide");
             if (isZero(newField[index])) {
               newField[index].isOpened = true;
               openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-            } else if (newField[index].isBomb == true) {
+            } else if (isBomb == true) {
               newArrayBombs.forEach((bomb) => {
-                if (bomb.isFlagged == false && bomb.isDoubt == false) {
-                  $(".box").eq(bomb.id).children().removeClass("hide");
+                const {isFlagged, isDoubt, id} = bomb;
+                if (isFlagged == false && isDoubt == false) {
+                  $(".box").eq(id).children().removeClass("hide");
                 }
               });
               timer.stop();
@@ -119,13 +121,13 @@ $(document).ready(function() {
           }
         break;
         case 3:
-          if (newField[index].isOpened == false && newField[index].isFlagged == false && newField[index].isDoubt == false && flags > 0) {
+          if (isOpened == false && isFlagged == false && isDoubt == false && flags > 0) {
             flags -= 1;
             totFlags.text(flags);
             $(".box").eq(index).addClass("syringe");
             newField[index].isFlagged = true;
-          } else if (newField[index].isFlagged == true || flags == 0 && newField[index].isDoubt == false){
-            if (newField[index].isFlagged == true) {
+          } else if (isFlagged == true || flags == 0 && isDoubt == false){
+            if (isFlagged == true) {
               flags += 1;
               totFlags.text(flags);
             }
@@ -133,7 +135,7 @@ $(document).ready(function() {
             $(".box").eq(index).addClass("mask");
             newField[index].isDoubt = true;
             newField[index].isFlagged = false;
-          } else if (newField[index].isDoubt == true) {
+          } else if (isDoubt == true) {
             $(".box").eq(index).removeClass("mask");
             newField[index].isDoubt = false;
           }
@@ -159,6 +161,16 @@ const box = {
   isFlagged: false,
   isDoubt: false
 };
+
+// Non funziona su Chrome e Safari per motivi di sicurezza, perchè sto lanciando in locale
+// if (typeof(Worker) !== "undefined") {
+//   // Yes! Web worker support!
+//   // Some code.....
+// } else {
+//   // Sorry! No Web Worker support..
+// }
+// var worker = new Worker('prova.js');
+// worker.postMessage('Happy Birthday');
 
 const colors = ["", "blue","green","red","indigo","orange","brown","pink","black"];
 
@@ -294,11 +306,12 @@ function openAdiacent(container, array, x, y) {
   for (elem of array) {
     for (pos of arrayPosAdj) {
       if (equalArray(0, elem, pos[0], pos[1])) {
+        const {isFlagged, isDoubt, id} = elem;
         adjArr.push(elem);
-        if (elem.isFlagged == false && elem.isDoubt == false) {
-          container.eq(elem.id).css("box-shadow","none");
-          container.eq(elem.id).css("background-color","white");
-          container.eq(elem.id).children().removeClass("hide");
+        if (isFlagged == false && isDoubt == false) {
+          container.eq(id).css("box-shadow","none");
+          container.eq(id).css("background-color","white");
+          container.eq(id).children().removeClass("hide");
         }
       }
     }
@@ -312,8 +325,8 @@ function openAdiacent(container, array, x, y) {
   }
 }
 
+// Solo su Safari, quando non sono sulla pagina, il timer non avanza in maniera corretta, è come se si bloccasse! Su Chrome invece funziona
 function timerCount() {
-  // mettere che si ferma anche col gameover, o qui o sopra!
   if (hoursInt == 99) {
     timer.stop();
   } else {
@@ -342,6 +355,7 @@ function timeReset() {
   hours.text("00");
 }
 
+// Solo su Safari, quando non sono sulla pagina, il timer non avanza in maniera corretta, è come se si bloccasse! Su Chrome invece funziona
 function Timer(func, time) {
   let obj = setInterval(func,time);
 
@@ -360,8 +374,9 @@ function Timer(func, time) {
 function win(field, flags, timer) {
   if (flags == 0) {
     for (item of field) {
-      if (item.isBomb == true) {
-        if (item.isFlagged == true) {
+      const {isBomb, isFlagged} = item;
+      if (isBomb == true) {
+        if (isFlagged == true) {
           continue
         } else {
           return
@@ -371,11 +386,7 @@ function win(field, flags, timer) {
       }
     }
     timer.stop();
-    // Vedere se servono
-    // $(".box").off("mouseup");
-    // $(".box").off("mousedown");
     $("#winner").css("display","flex")
-    console.log("HAI VINTO")
   }
 }
 

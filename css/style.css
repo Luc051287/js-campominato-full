@@ -1,3 +1,5 @@
+/*mancano le istruzioni di compatibilità*/
+
 * {
   box-sizing: border-box;
   margin: 0;
@@ -410,7 +412,7 @@ i {
   }
 }
 
-/*Vedere se si può fare qualcosa per mettere solo una animazione*/
+/*Manca ridemensionamento celle per schermi più piccoli*/
 
 @keyframes cloudOne {
   0% {
