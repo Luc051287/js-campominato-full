@@ -1,6 +1,3 @@
-// Vedere se si può destrutturare
-// const {name, prefix, family, color} = item;
-
 $(document).ready(function() {
 
   const fieldBoxes = $("#box_field");
@@ -96,7 +93,8 @@ $(document).ready(function() {
       }
     });
 
-    $(".box").mouseup( function(event) {
+    // Controllare se fa casino
+    $(document).mouseup( function(event) {
       const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
       switch (event.which) {
         case 1:
@@ -291,7 +289,6 @@ function isZero(object) {
   return object.bombs == 0;
 }
 
-// chiedere o vedere bene questa cosa per gli opzionali
 function equalArray(value, item, x, y) {
   if (value != 0) {
     return (value[0] == item.position[0] && value[1] == item.position[1]);
