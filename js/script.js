@@ -43,7 +43,6 @@ $(document).ready(function() {
   });
 
   $("ul.options > li").click(function() {
-    // ATTENZIONE!!!! Quando il livello è medio o difficile l'animazione del bottone parte in ritardo! Da controllare!
     timer.restart();
     const index = $(this).index();
     const openedItem = $("ul.options > li.opened");
@@ -57,6 +56,7 @@ $(document).ready(function() {
       timer.restart();
       game(index);
     });
+
     $("#restart").click(function() {
       timer.restart();
       game(index);
@@ -93,8 +93,9 @@ $(document).ready(function() {
       }
     });
 
-    // Controllare se fa casino
-    $(document).mouseup( function(event) {
+    // Da errore ogni volta che clicco su qualcosa che non è una casella, aggiustare, magari vedere quell'esercizio della barra di Revolut
+    // $(document).mouseup...
+    $(".box").mouseup( function(event) {
       const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
       switch (event.which) {
         case 1:

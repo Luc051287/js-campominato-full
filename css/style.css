@@ -402,12 +402,13 @@ main {
 /*ANIMATIONS*/
 
 @keyframes shake {
+  0% {transform: scale(1) rotateZ(0)}
   10% {transform: scale(1.1) rotateZ(3deg)}
   20% {transform: scale(1.1) rotateZ(-3deg)}
   40% {transform: scale(1.1) rotateZ(3deg)}
   60% {transform: scale(1.1) rotateZ(-3deg)}
   80% {transform: scale(1.1) rotateZ(3deg)}
-  100% {transform: scale(1)}
+  100% {transform: scale(1) rotateZ(0)}
 }
 
 @keyframes rotate {
