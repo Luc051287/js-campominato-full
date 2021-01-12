@@ -92,11 +92,13 @@ $(document).ready(function() {
         $(this).css("background-color","white");
       }
     });
-    
-    $(document).mouseup( function(event) {
-      if (typeof index === 'undefined') {
-        return
-      }
+
+    // rigestire il mouseup, perchè lui l'indice di prima lo tiene quindi ogni volta che faccio mouseup mi modifica quella casella
+    //$(document).mouseup
+    $(".box").mouseup( function(event) {
+      // if (typeof index === 'undefined') {
+      //   return
+      // }
       const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
       switch (event.which) {
         case 1:
