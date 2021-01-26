@@ -34,6 +34,12 @@ $(document).ready(function() {
     $(".options").slideToggle();
   });
 
+  $(".container").click(function(event) {
+    if(!$(event.target).parents().is(".my_select")) {
+      $(".options").slideUp();
+    }
+  });
+
   $(document).on("mouseenter", ".options > li:not(.opened)", function() {
     $(this).addClass("hover");
   });
