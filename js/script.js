@@ -45,6 +45,7 @@ $(document).ready(function() {
   $("ul.options > li").click(function() {
     timer.restart();
     const index = $(this).index();
+    level = index;
     const openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
@@ -78,7 +79,19 @@ $(document).ready(function() {
     flags = levelChoise(level)[2];
     totFlags.text(flags);
     fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
-
+    if ($(this).width() < 1350 && level != 0) {
+        $(".box").css({"width": "30px", "height": "30px"});
+        $(".box_item").css({"line-height": "30px"});
+        $(".fas").css({"line-height": "30px", "font-size": "18px"});
+        if (level == 2) {
+          fieldBoxes.css({"width": "1020px", "height": "544px"});
+        } else if (level == 1) {
+          fieldBoxes.css({"width": "544px", "height": "544px"});
+        }
+    }
+    if ($(this).width() < 1600 && level != 0) {
+        $(".box").css({"margin" : "2px"});
+    }
     $(".box_item").addClass("hide");
     $(".fas").addClass("hide");
 
@@ -93,7 +106,7 @@ $(document).ready(function() {
       }
     });
 
-    // rigestire il mouseup, perchè lui l'indice di prima lo tiene quindi ogni volta che faccio mouseup mi modifica quella casella
+    // rigestire il mouseup, però è complicato da fare se si alza il mouse
     //$(document).mouseup
     $(".box").mouseup( function(event) {
       // if (typeof index === 'undefined') {
@@ -147,8 +160,39 @@ $(document).ready(function() {
     });
   }
   // Tolgo il menu che si apre con il tasto destro
-  $(document).on("contextmenu",function(){
-    return false;
+  // $(document).on("contextmenu",function(){
+  //   return false;
+  // });
+
+  $(window).resize(function(event) {
+    if ($(this).width() < 1350 && level != 0) {
+        $(".box").css({"width": "30px", "height": "30px", "margin" : "2px"});
+        $(".box_item").css({"line-height": "30px"});
+        $(".fas").css({"line-height": "30px", "font-size": "18px"});
+        if (level == 1) {
+          fieldBoxes.css({"width": "544px", "height": "544px"});
+        } else if (level == 2) {
+          fieldBoxes.css({"width": "1020px", "height": "544px"});
+        }
+    } else if ($(this).width() < 1600 && level != 0) {
+        $(".box").css({"width": "40px", "height": "40px", "margin" : "2px"});
+        $(".box_item").css({"line-height": "40px"});
+        $(".fas").css({"line-height": "40px", "font-size": "25px"});
+        if (level == 1) {
+          fieldBoxes.css({"width": "704px", "height": "704px"});
+        } else if (level == 2) {
+          fieldBoxes.css({"width": "1320px", "height": "704px"});
+        }
+    } else if ($(this).width() >= 1600 && level != 0) {
+      $(".box").css({"width": "40px", "height": "40px", "margin" : "5px"});
+      $(".box_item").css({"line-height": "40px"});
+      $(".fas").css({"line-height": "40px", "font-size": "25px"});
+      if (level == 1) {
+        fieldBoxes.css({"width": "800px", "height": "800px"});
+      } else if (level == 2) {
+        fieldBoxes.css({"width": "1500px", "height": "800px"});
+      }
+    }
   });
 
 });
@@ -226,22 +270,21 @@ function levelChoise(value) {
       max = [9,9];
       bombs = 10;
       width = 450;
-      // in caso togliere la height perché lui la cambia da solo
       height = 450;
       break;
     case 1:
       gameLevel = randomInteger(0, 255);
       max = [16,16];
       bombs = 40;
-      width = 800;
-      height = 800;
+      width = (window.innerWidth < 1600) ? 704 : 800;
+      height = (window.innerWidth < 1600) ? 704 : 800;
       break;
     case 2:
       gameLevel = randomInteger(0, 479);
       max = [16,30];
       bombs = 99;
-      width = 1500;
-      height = 800;
+      width = (window.innerWidth < 1600) ? 1320 : 1500;
+      height = (window.innerWidth < 1600) ? 704 : 800;
       break;
   }
   return [gameLevel, max, bombs, width, height];

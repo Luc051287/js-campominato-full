@@ -29,7 +29,7 @@ h1 {
   line-height: 70px;
   font-size: 70px;
   font-family: 'Nerko One', cursive;
-  min-width: calc(100% - 657px);
+  min-width: calc(100% - 655px);
   text-align: center;
 }
 
@@ -70,15 +70,15 @@ i {
 #button_select {
   height: 100%;
   display: flex;
-  justify-content: flex-end;
+  justify-content: space-between;
   align-items: center;
-  /* width: 470px; */
+  width: 330px;
 }
 
 #flags_time {
   display: flex;
-  /* justify-content: space-around;
-  width: 470px; */
+  /* justify-content: space-around; */
+  width: 325px;
   padding: 5px 0;
 }
 
@@ -194,6 +194,7 @@ main {
   display: flex;
   align-content: center;
   background-color: #394a6d;
+  overflow: auto;
 }
 
 #box_field {
@@ -267,7 +268,6 @@ main {
 }
 
 #reset {
-  margin: 0 20px;
   width: 120px;
   border: 2px solid #394a6d;
   border-radius: 5px 15px 5px;
@@ -498,3 +498,4 @@ main {
     top: 15%;
   }
 }
+/* MEDIA QUERIES */
