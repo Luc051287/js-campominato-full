@@ -59,7 +59,6 @@ $(document).ready(function() {
     selected.toggleClass("open");
     $(".options").slideUp();
     game(level);
-    console.log(index);
     $("#reset").click(function() {
       timer.restart();
       game(level);
@@ -114,9 +113,6 @@ $(document).ready(function() {
         $(this).css("background-color","white");
       }
     });
-    // rigestire il mouseup, però è complicato da fare se si alza il mouse
-    //$(document).mouseup
-
   }
   // Tolgo il menu che si apre con il tasto destro
   $(document).on("contextmenu",function(){
@@ -124,14 +120,12 @@ $(document).ready(function() {
   });
 
   $(document).mousedown( function(event) {
-    console.log($(event.target), $(event.target).parents().is("#box_field"))
     if(!$(event.target).parents().is("#box_field")) {
       index = -1;
     }
   });
 
   $(document).mouseup( function(event) {
-    console.log(index);
     if (index === -1) {
       return
     }
@@ -159,8 +153,6 @@ $(document).ready(function() {
         }
       break;
       case 3:
-        console.log(index, isOpened, isFlagged, isDoubt, flags)
-        console.log("VOLTE")
         if (isOpened == false && isFlagged == false && isDoubt == false && flags > 0) {
           flags -= 1;
           totFlags.text(flags);
@@ -172,7 +164,6 @@ $(document).ready(function() {
             totFlags.text(flags);
           }
           $(".box").eq(index).removeClass("syringe");
-          console.log("SONO QUI")
           $(".box").eq(index).addClass("mask");
           newField[index].isDoubt = true;
           newField[index].isFlagged = false;
