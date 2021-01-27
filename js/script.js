@@ -11,8 +11,7 @@ $(document).ready(function() {
   secondsInt = 0;
   minutesInt = 0;
   hoursInt = 0;
-  let newField;
-  let newArrayBombs;
+  let index, newField, newArrayBombs;
   let level = 0;
   let flags = levelChoise(level)[2];
   totFlags.text(flags);
@@ -52,28 +51,29 @@ $(document).ready(function() {
 
   $("ul.options > li").click(function() {
     timer.restart();
-    const index = $(this).index();
-    level = index;
+    level = $(this).index();
     const openedItem = $("ul.options > li.opened");
     openedItem.removeClass("opened");
     $(this).removeClass("hover").addClass("opened");
     selected.children("span").html($(this).children("span").text());
     selected.toggleClass("open");
     $(".options").slideUp();
-    game(index);
+    game(level);
+    console.log(index);
     $("#reset").click(function() {
       timer.restart();
-      game(index);
+      game(level);
     });
     $("#restart").click(function() {
       timer.restart();
-      game(index);
+      game(level);
       $("#winner").hide();
     });
   });
 
   // Gioco
   function game(level) {
+    index = -1;
     // $(document).on({field: newField}, "mousedown", ".box", mouseDown)
     fieldBoxes.empty();
     // Creo il campo
@@ -106,7 +106,6 @@ $(document).ready(function() {
     $(".fas").addClass("hide");
 
     $(".box").mousedown( function(event) {
-      // globale, viene letto anche dal mouseup
       index = $(this).index();
       const {isFlagged, isDoubt} = newField[index];
       if (event.which == 1 && isFlagged == false && isDoubt == false) {
@@ -115,63 +114,75 @@ $(document).ready(function() {
         $(this).css("background-color","white");
       }
     });
-
     // rigestire il mouseup, però è complicato da fare se si alza il mouse
     //$(document).mouseup
-    $(".box").mouseup( function(event) {
-      // if (typeof index === 'undefined') {
-      //   return
-      // }
-      const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
-      switch (event.which) {
-        case 1:
-          if (isFlagged == false && isDoubt == false) {
-            $(".box").eq(index).children().removeClass("hide");
-            if (isZero(newField[index])) {
-              newField[index].isOpened = true;
-              openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
-            } else if (isBomb == true) {
-              newArrayBombs.forEach((bomb) => {
-                const {isFlagged, isDoubt, id} = bomb;
-                if (isFlagged == false && isDoubt == false) {
-                  $(".box").eq(id).children().removeClass("hide");
-                }
-              });
-              timer.stop();
-              $(".box").css("cursor","default");
-              $(".box").children().css("cursor","default");
-              $(".box").off("mouseup");
-              $(".box").off("mousedown");
-            }
-          }
-        break;
-        case 3:
-          if (isOpened == false && isFlagged == false && isDoubt == false && flags > 0) {
-            flags -= 1;
-            totFlags.text(flags);
-            $(".box").eq(index).addClass("syringe");
-            newField[index].isFlagged = true;
-          } else if (isFlagged == true || flags == 0 && isDoubt == false){
-            if (isFlagged == true) {
-              flags += 1;
-              totFlags.text(flags);
-            }
-            $(".box").eq(index).removeClass("syringe");
-            $(".box").eq(index).addClass("mask");
-            newField[index].isDoubt = true;
-            newField[index].isFlagged = false;
-          } else if (isDoubt == true) {
-            $(".box").eq(index).removeClass("mask");
-            newField[index].isDoubt = false;
-          }
-          break;
-      }
-      win(newField, flags, timer, $("#winner"));
-    });
+
   }
   // Tolgo il menu che si apre con il tasto destro
   $(document).on("contextmenu",function(){
     return false;
+  });
+
+  $(document).mousedown( function(event) {
+    console.log($(event.target), $(event.target).parents().is("#box_field"))
+    if(!$(event.target).parents().is("#box_field")) {
+      index = -1;
+    }
+  });
+
+  $(document).mouseup( function(event) {
+    console.log(index);
+    if (index === -1) {
+      return
+    }
+    const {isFlagged, isDoubt, isBomb, isOpened} = newField[index];
+    switch (event.which) {
+      case 1:
+        if (isFlagged == false && isDoubt == false) {
+          $(".box").eq(index).children().removeClass("hide");
+          if (isZero(newField[index])) {
+            newField[index].isOpened = true;
+            openAdiacent($(".box"), newField, newField[index].position[0], newField[index].position[1]);
+          } else if (isBomb == true) {
+            newArrayBombs.forEach((bomb) => {
+              const {isFlagged, isDoubt, id} = bomb;
+              if (isFlagged == false && isDoubt == false) {
+                $(".box").eq(id).children().removeClass("hide");
+              }
+            });
+            timer.stop();
+            $(".box").css("cursor","default");
+            $(".box").children().css("cursor","default");
+            $(".box").off("mouseup");
+            $(".box").off("mousedown");
+          }
+        }
+      break;
+      case 3:
+        console.log(index, isOpened, isFlagged, isDoubt, flags)
+        console.log("VOLTE")
+        if (isOpened == false && isFlagged == false && isDoubt == false && flags > 0) {
+          flags -= 1;
+          totFlags.text(flags);
+          $(".box").eq(index).addClass("syringe");
+          newField[index].isFlagged = true;
+        } else if (isFlagged == true || flags == 0 && isDoubt == false){
+          if (isFlagged == true) {
+            flags += 1;
+            totFlags.text(flags);
+          }
+          $(".box").eq(index).removeClass("syringe");
+          console.log("SONO QUI")
+          $(".box").eq(index).addClass("mask");
+          newField[index].isDoubt = true;
+          newField[index].isFlagged = false;
+        } else if (isDoubt == true) {
+          $(".box").eq(index).removeClass("mask");
+          newField[index].isDoubt = false;
+        }
+        break;
+    }
+    win(newField, flags, timer, $("#winner"));
   });
 
   $(window).resize(function(event) {
