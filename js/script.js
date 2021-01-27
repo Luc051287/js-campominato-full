@@ -1,3 +1,5 @@
+// LUCA GENTILI - PROGETTO CAMPOMINATO
+
 $(document).ready(function() {
   // cambio lo style dello pseudo element
   $("<style type='text/css' id='dynamic' />").appendTo("head");
