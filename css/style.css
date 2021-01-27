@@ -392,20 +392,6 @@ main {
   transform: scale(1.1);
 }
 
-/*MEDIA-QUERY altezza e larghezza!!*/
-@media (min-width: 992px) {
-
-}
-
-@media (min-width: 1200px) {
-
-}
-
-@media (min-width: 768px) {}
-
-@media (max-width: 490px) {}
-
-
 /*ANIMATIONS*/
 
 @keyframes shake {
@@ -498,4 +484,3 @@ main {
     top: 15%;
   }
 }
-/* MEDIA QUERIES */

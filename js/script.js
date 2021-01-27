@@ -1,5 +1,7 @@
 $(document).ready(function() {
-
+  // cambio lo style dello pseudo element
+  $("<style type='text/css' id='dynamic' />").appendTo("head");
+  //
   const fieldBoxes = $("#box_field");
   const totFlags = $("#number_of_flags");
   const selected = $(".selected");
@@ -63,7 +65,6 @@ $(document).ready(function() {
       timer.restart();
       game(index);
     });
-
     $("#restart").click(function() {
       timer.restart();
       game(index);
@@ -89,6 +90,9 @@ $(document).ready(function() {
         $(".box").css({"width": "30px", "height": "30px"});
         $(".box_item").css({"line-height": "30px"});
         $(".fas").css({"line-height": "30px", "font-size": "18px"});
+        // cambio lo style dello pseudo element
+        $("#dynamic").text(".box::before{line-height: 30px; font-size: 20px; width: 30px; height: 30px}");
+        //
         if (level == 2) {
           fieldBoxes.css({"width": "1020px", "height": "544px"});
         } else if (level == 1) {
@@ -162,19 +166,20 @@ $(document).ready(function() {
           }
           break;
       }
-      win(newField, flags, timer);
+      win(newField, flags, timer, $("#winner"));
     });
   }
   // Tolgo il menu che si apre con il tasto destro
-  // $(document).on("contextmenu",function(){
-  //   return false;
-  // });
+  $(document).on("contextmenu",function(){
+    return false;
+  });
 
   $(window).resize(function(event) {
     if ($(this).width() < 1350 && level != 0) {
         $(".box").css({"width": "30px", "height": "30px", "margin" : "2px"});
         $(".box_item").css({"line-height": "30px"});
         $(".fas").css({"line-height": "30px", "font-size": "18px"});
+        $("#dynamic").text(".box::before{line-height: 30px; font-size: 20px; width: 30px; height: 30px}");
         if (level == 1) {
           fieldBoxes.css({"width": "544px", "height": "544px"});
         } else if (level == 2) {
@@ -184,15 +189,14 @@ $(document).ready(function() {
         $(".box").css({"width": "40px", "height": "40px", "margin" : "2px"});
         $(".box_item").css({"line-height": "40px"});
         $(".fas").css({"line-height": "40px", "font-size": "25px"});
+        $("#dynamic").text(".box::before{line-height: 40px; font-size: 25px; width: 40px; height: 40px}");
         if (level == 1) {
           fieldBoxes.css({"width": "704px", "height": "704px"});
         } else if (level == 2) {
           fieldBoxes.css({"width": "1320px", "height": "704px"});
         }
     } else if ($(this).width() >= 1600 && level != 0) {
-      $(".box").css({"width": "40px", "height": "40px", "margin" : "5px"});
-      $(".box_item").css({"line-height": "40px"});
-      $(".fas").css({"line-height": "40px", "font-size": "25px"});
+      $(".box").css({"margin" : "5px"});
       if (level == 1) {
         fieldBoxes.css({"width": "800px", "height": "800px"});
       } else if (level == 2) {
@@ -421,7 +425,7 @@ function Timer(func, time) {
   }
 }
 
-function win(field, flags, timer) {
+function win(field, flags, timer, elem) {
   if (flags == 0) {
     for (item of field) {
       const {isBomb, isFlagged} = item;
@@ -436,10 +440,10 @@ function win(field, flags, timer) {
       }
     }
     timer.stop();
-    $("#winner").css("display","flex")
+    elem.css("display","flex")
   }
 }
 
 $.fn.myText = function (time) {
-    this.text((time >= 10) ? time : "0" + time);
+  this.text((time >= 10) ? time : "0" + time);
 };
