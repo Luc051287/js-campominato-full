@@ -277,6 +277,7 @@ main {
 
 #reset:hover {
   animation: shake 1s ease-in-out alternate;
+  color: #FFFFFF;
 }
 
 #winner {
