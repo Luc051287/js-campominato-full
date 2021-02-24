@@ -1,9 +1,10 @@
-// LUCA GENTILI - PROGETTO CAMPOMINATO
+// LUCA GENTILI - PROGETTO CAMPOMINATO-FULL
 
 $(document).ready(function() {
   // cambio lo style dello pseudo element
-  $("<style type='text/css' id='dynamic' />").appendTo("head");
-  //
+  $("<style type='text/css' id='dynamic'/>").appendTo("head");
+
+  // Impostazioni di prima visualizzazione
   const fieldBoxes = $("#box_field");
   const totFlags = $("#number_of_flags");
   const selected = $(".selected");
@@ -19,38 +20,43 @@ $(document).ready(function() {
   totFlags.text(flags);
   game(level);
 
+  // creo il Timer
   const timer = new Timer(timerCount, 1000);
 
   $("#reset").click(function() {
     timer.restart();
     game(level);
-  })
+  });
 
+  // Restart del gioco dopo la vittoria
   $("#restart").click(function() {
     timer.restart();
     game(level);
     $("#winner").hide();
-  })
+  });
 
+  // Apro il menu select al click
   selected.click(function() {
     $(this).toggleClass("open");
     $(".options").slideToggle();
   });
 
+  // Chiusura del menu select una volta effettuata la selezione.
   $(".container").click(function(event) {
     if(!$(event.target).parents().is(".my_select")) {
       $(".options").slideUp();
     }
   });
 
+  // Attivo e disattivo l'animazione
   $(document).on("mouseenter", ".options > li:not(.opened)", function() {
     $(this).addClass("hover");
   });
-
   $(document).on("mouseleave", ".options > li:not(.opened)", function() {
     $(this).removeClass("hover");
   });
 
+  // Ricreo il gioco e le rispettive funzioni per tutte i livelli
   $("ul.options > li").click(function() {
     timer.restart();
     level = $(this).index();
@@ -72,21 +78,22 @@ $(document).ready(function() {
     });
   });
 
-  // Gioco
+  // Inizio del gioco, passando il livello di difficoltà
   function game(level) {
+    // indice usato per gestire il rilascio del mouse fuori dallo schema
     index = -1;
     // $(document).on({field: newField}, "mousedown", ".box", mouseDown)
     fieldBoxes.empty();
     // Creo il campo
     newField = field(level);
-
-    // genero le bombe
+    // Genero le bombe
     newArrayBombs = arrayBombs(level, newField);
-
+    // Riempio il campo
     generatefield (level, newField, newArrayBombs, fieldBoxes);
     flags = levelChoise(level)[2];
     totFlags.text(flags);
     fieldBoxes.css({"width": `${levelChoise(level)[3]}px`, "height": `${levelChoise(level)[4]}px`});
+    // Responsive
     if ($(this).width() < 1350 && level != 0) {
         $(".box").css({"width": "30px", "height": "30px"});
         $(".box_item").css({"line-height": "30px"});
@@ -106,6 +113,7 @@ $(document).ready(function() {
     $(".box_item").addClass("hide");
     $(".fas").addClass("hide");
 
+    // apertura di una casella, sia con tasto dx che sx
     $(".box").mousedown( function(event) {
       index = $(this).index();
       const {isFlagged, isDoubt} = newField[index];
@@ -116,10 +124,6 @@ $(document).ready(function() {
       }
     });
   }
-  // Tolgo il menu che si apre con il tasto destro
-  $(document).on("contextmenu",function(){
-    return false;
-  });
 
   $(document).mousedown( function(event) {
     if(!$(event.target).parents().is("#box_field")) {
@@ -178,7 +182,8 @@ $(document).ready(function() {
     win(newField, flags, timer, $("#winner"));
   });
 
-  $(window).resize(function(event) {
+  // Responsive
+  $(window).resize(function() {
     if ($(this).width() < 1350 && level != 0) {
         $(".box").css({"width": "30px", "height": "30px", "margin" : "2px"});
         $(".box_item").css({"line-height": "30px"});
@@ -209,6 +214,11 @@ $(document).ready(function() {
     }
   });
 
+  // Tolgo il menu del browser che si apre con il tasto destro
+  $(document).on("contextmenu",function(){
+    return false;
+  });
+
 });
 
 //----------- FUNCTIONS ------------------------------------>
@@ -222,7 +232,7 @@ const box = {
   isDoubt: false
 };
 
-// Non funziona su Chrome e Safari per motivi di sicurezza, perchè sto lanciando in locale
+// Apertura nuovo thread. Non funziona su Chrome e Safari per motivi di sicurezza, perchè sto lanciando in locale
 // if (typeof(Worker) !== "undefined") {
 //   // Yes! Web worker support!
 //   // Some code.....
@@ -244,7 +254,6 @@ function numbOfBombs(arraybombs, x, y) {
   }
   return numOfBombs;
 }
-
 
 function generatefield (level, field, arraybombs, fieldBoxes) {
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
@@ -276,6 +285,7 @@ function includes(value, array) {
 
 const randomInteger = (min, max) => Math.floor(Math.random() * (max - min + 1)) + min;
 
+// Scelta del livello
 function levelChoise(value) {
   let gameLevel,max,bombs,width,height;
   switch(value) {
@@ -304,6 +314,7 @@ function levelChoise(value) {
   return [gameLevel, max, bombs, width, height];
 }
 
+// Ricavo l'ID dallo schema
 function getId(array, x, y) {
   let id;
   array.forEach(item => {
@@ -314,9 +325,10 @@ function getId(array, x, y) {
   return id;
 }
 
+// costruisco lo schema
 function field(level) {
   let i = 0;
-  let field = []
+  let field = [];
   for (let x=1; x<=levelChoise(level)[1][0]; x++) {
     for (let y=1; y<=levelChoise(level)[1][1]; y++) {
       let newBox = Object.create(box);
@@ -331,8 +343,9 @@ function field(level) {
   return field;
 }
 
+// Calcolo la posizione delle bombe nello schema
 function arrayBombs(level, field) {
-  let arraybombs = []
+  let arraybombs = [];
   while (arraybombs.length < levelChoise(level)[2]) {
     bomb = levelChoise(level)[0];
     if (!includes(field[bomb].position, arraybombs)) {
@@ -358,6 +371,7 @@ function equalArray(value, item, x, y) {
   }
 }
 
+// Apertura caselle adiacenti
 function openAdiacent(container, array, x, y) {
   let adjArr = [];
   const arrayPosAdj = [[x-1, y-1],[x-1, y],[x-1, y+1],[x, y-1],[x, y+1],[x+1, y-1],[x+1, y],[x+1, y+1]];
@@ -374,6 +388,8 @@ function openAdiacent(container, array, x, y) {
       }
     }
   }
+  // funzione ricorsiva.
+  // Controllo se la casella ha 0 bombe intorno o se sono già state aperte. In questo caso continuo ad aprirle, altrimenti mi fermo
   for (item of adjArr) {
     if (isZero(item) && item.isOpened == false) {
       item.isOpened = true;
@@ -384,6 +400,7 @@ function openAdiacent(container, array, x, y) {
 }
 
 // Solo su Safari, quando non sono sulla pagina, il timer non avanza in maniera corretta, è come se si bloccasse! Su Chrome invece funziona
+// Gestione timer ore/minuti/secondi
 function timerCount() {
   if (hoursInt == 99) {
     timer.stop();
@@ -404,6 +421,7 @@ function timerCount() {
   }
 }
 
+// Funzione Timer Reset
 function timeReset() {
   secondsInt = 0;
   seconds.text("00");
@@ -414,6 +432,7 @@ function timeReset() {
 }
 
 // Solo su Safari, quando non sono sulla pagina, il timer non avanza in maniera corretta, è come se si bloccasse! Su Chrome invece funziona
+// Funzione-oggetto Timer
 function Timer(func, time) {
   let obj = setInterval(func,time);
 
@@ -429,6 +448,7 @@ function Timer(func, time) {
   }
 }
 
+// Controllo vincita
 function win(field, flags, timer, elem) {
   if (flags == 0) {
     for (item of field) {
@@ -444,10 +464,11 @@ function win(field, flags, timer, elem) {
       }
     }
     timer.stop();
-    elem.css("display","flex")
+    elem.css("display","flex");
   }
 }
 
+// Update metodo text di JQuery
 $.fn.myText = function (time) {
   this.text((time >= 10) ? time : "0" + time);
 };
